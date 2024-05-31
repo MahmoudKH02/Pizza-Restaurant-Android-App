@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                 try {
 
                     if (user != null && user.moveToFirst() && checkCorrectPassword(user)) {
-                        Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                     } else {

@@ -1,66 +1,102 @@
 package com.example.pizzarestaurantproject;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
+import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
-import com.example.pizzarestaurantproject.helper.ConnectionAsyncTask;
-
-import java.util.List;
+import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button getStartedButton;
+    private static final int BACK_PRESS_INTERVAL = 2000; // 2 seconds
+    private long lastBackPressedTime;
+
+    private AppBarConfiguration mAppBarConfiguration;
+    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.drawer_layout), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        setProgress(false);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        getStartedButton = (Button) findViewById(R.id.getStarted);
+        drawerLayout = findViewById(R.id.drawer_layout);
 
-        getStartedButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ConnectionAsyncTask connectionAsyncTask = new
-                        ConnectionAsyncTask(MainActivity.this);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawerLayout, toolbar,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close
+        );
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
 
-                connectionAsyncTask.execute("https://18fbea62d74a40eab49f72e12163fe6c.api.mockbin.io/");
-            }
-        });
+        NavigationView navigationView = findViewById(R.id.nav_view);
+
+        // Define top-level destinations
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_home, R.id.nav_pizza_menu, R.id.nav_orders, R.id.nav_favorites,
+                R.id.nav_special_offers, R.id.nav_profile, R.id.nav_find_us)
+                .setOpenableLayout(drawerLayout)
+                .build();
+
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
+
+//        // Handle logout separately
+//        navigationView.setNavigationItemSelectedListener(item -> {
+//            if (item.getItemId() == R.id.nav_logout) {
+////                logout();
+//                drawerLayout.closeDrawer(GravityCompat.START);
+//                return true;
+//            }
+//            boolean handled = NavigationUI.onNavDestinationSelected(item, navController);
+//            if (handled) {
+//                drawerLayout.closeDrawer(GravityCompat.START);
+//            }
+//            return handled;
+//        });
+
     }
 
-    public void setButtonText(String text) {
-        getStartedButton.setText(text);
-    }
+    @Override
+    public void onBackPressed() {
 
-    public void fillPizzaTypes(List<String> pizzaTypes) {
-        Pizza.setPizzaTypes(pizzaTypes);
-    }
-
-    public void setProgress(boolean progress) {
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-
-        if (progress) {
-            progressBar.setVisibility(View.VISIBLE);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else if (lastBackPressedTime + BACK_PRESS_INTERVAL > System.currentTimeMillis()) {
+            super.onBackPressed();
         } else {
-            progressBar.setVisibility(View.GONE);
+            Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
+            lastBackPressedTime = System.currentTimeMillis();
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
     }
 
 } // end class

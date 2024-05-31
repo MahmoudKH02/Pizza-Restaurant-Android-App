@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:label="Home"
+        android:name="com.example.pizzarestaurantproject.fragments.HomeFragment"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/nav_pizza_menu"
+        android:label="Menu Categories"
+        android:name="com.example.pizzarestaurantproject.fragments.PizzaMenuFragment"
+        tools:layout="@layout/fragment_pizza_menu" />
+    <fragment
+        android:id="@+id/nav_orders"
+        android:label="Your Orders"
+        android:name="com.example.pizzarestaurantproject.fragments.YourOrdersFragment"
+        tools:layout="@layout/fragment_your_orders" />
+    <fragment
+        android:id="@+id/nav_favorites"
+        android:label="Your Favorites"
+        android:name="com.example.pizzarestaurantproject.fragments.YourFavouritesFragment"
+        tools:layout="@layout/fragment_your_favourites" />
+    <fragment
+        android:id="@+id/nav_special_offers"
+        android:label="Special Offers"
+        android:name="com.example.pizzarestaurantproject.fragments.SpecialOffersFragment"
+        android:layout="@layout/fragment_special_offers" />
+    <fragment
+        android:id="@+id/nav_profile"
+        android:label="Profile"
+        android:name="com.example.pizzarestaurantproject.fragments.ProfileFragment"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/nav_find_us"
+        android:label="Find Us"
+        android:name="com.example.pizzarestaurantproject.fragments.FindUsFragment"
+        tools:layout="@layout/fragment_find_us" />
+</navigation>

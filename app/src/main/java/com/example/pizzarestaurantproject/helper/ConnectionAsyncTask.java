@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.example.pizzarestaurantproject.LoginSignupActivity;
-import com.example.pizzarestaurantproject.MainActivity;
+import com.example.pizzarestaurantproject.GetStartedActivity;
 
 import java.util.List;
 
@@ -19,9 +19,9 @@ public class ConnectionAsyncTask extends AsyncTask<String, String, String> {
 
     @Override
     protected void onPreExecute() {
-        ((MainActivity) activity).setButtonText("connecting");
+        ((GetStartedActivity) activity).setButtonText("connecting");
         super.onPreExecute();
-        ((MainActivity) activity).setProgress(true);
+        ((GetStartedActivity) activity).setProgress(true);
     }
 
     @Override
@@ -32,18 +32,18 @@ public class ConnectionAsyncTask extends AsyncTask<String, String, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-        ((MainActivity) activity).setProgress(false);
+        ((GetStartedActivity) activity).setProgress(false);
 
         if (s == null) {
             Toast.makeText(activity, "Failed to get a successful response", Toast.LENGTH_SHORT).show();
-            ((MainActivity) activity).setButtonText("Get Started");
+            ((GetStartedActivity) activity).setButtonText("Get Started");
         } else {
             List<String> pizzaTypes = JsonParser.getObjectFromJson(s);
-            ((MainActivity) activity).fillPizzaTypes(pizzaTypes);
+            ((GetStartedActivity) activity).fillPizzaTypes(pizzaTypes);
             Intent intent = new Intent(activity, LoginSignupActivity.class);
             activity.startActivity(intent);
 
-            ((MainActivity) activity).setButtonText("Get Started");
+            ((GetStartedActivity) activity).setButtonText("Get Started");
         }
     }
 } // end class
