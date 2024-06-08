@@ -215,7 +215,7 @@ public class SignupActivity extends AppCompatActivity {
         );
 
         Cursor user = dataBaseHelper.getUser(email);
-        dataBaseHelper.close();
+
 
         String errorMsg;
 
@@ -233,6 +233,8 @@ public class SignupActivity extends AppCompatActivity {
 
         displayError(errorMsg, emailField, emailErrorDisplayed);
         emailErrorDisplayed = true;
+        dataBaseHelper.close();
+
 
         return false;
     }
@@ -244,7 +246,7 @@ public class SignupActivity extends AppCompatActivity {
         if (!pattern.matcher(password).matches()) {
             displayError(
                     "Password must be at least 8 characters long," +
-                    " and include one or more digits, " +
+                    "and include one or more digits, " +
                     "one or more alphabetic character",
                     passwordField,
                     passwordErrorDisplayed
