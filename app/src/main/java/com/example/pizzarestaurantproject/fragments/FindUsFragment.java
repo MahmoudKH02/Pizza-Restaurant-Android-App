@@ -1,66 +1,80 @@
 package com.example.pizzarestaurantproject.fragments;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.example.pizzarestaurantproject.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FindUsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FindUsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public FindUsFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FindUsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FindUsFragment newInstance(String param1, String param2) {
-        FindUsFragment fragment = new FindUsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_find_us, container, false);
+
+        // Map Container Click Listener
+        LinearLayout mapContainer = view.findViewById(R.id.mapContainer);
+        mapContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGoogleMaps();
+            }
+        });
+
+        // Email TextView Click Listener
+        TextView emailTextView = view.findViewById(R.id.email);
+        emailTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openEmailClient();
+            }
+        });
+
+        // Phone Number TextView Click Listener
+        TextView phoneTextView = view.findViewById(R.id.phoneNumber);
+        phoneTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialer();
+            }
+        });
+
+        return view;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_find_us, container, false);
+    // Method to open Google Maps with a specific location
+    private void openGoogleMaps() {
+        Intent mapsIntent =new Intent();
+        mapsIntent.setAction(Intent.ACTION_VIEW);
+        mapsIntent.setData(Uri.parse("geo:31.961013, 35.190483"));
+        startActivity(mapsIntent);
+    }
+
+    // Method to open email client with a predefined email address
+    private void openEmailClient() {
+        Intent gmailIntent = new Intent().setAction(Intent.ACTION_SENDTO);
+        gmailIntent.setDataAndType(Uri.parse("mailto:"), "message/rfc822");
+        gmailIntent.putExtra(Intent.EXTRA_EMAIL, "AdvancePizza@Pizza.com");
+        gmailIntent.putExtra(Intent.EXTRA_SUBJECT,"My Subject");
+        gmailIntent.putExtra(Intent.EXTRA_TEXT,"Content of the message");
+        startActivity(gmailIntent);
+    }
+
+    // Method to open the phone dialer with a predefined phone number
+    private void openDialer() {
+        Intent dialIntent =new Intent();
+        dialIntent.setAction(Intent.ACTION_DIAL);
+        dialIntent.setData(Uri.parse("tel:0599000000"));
+        startActivity(dialIntent);
     }
 }

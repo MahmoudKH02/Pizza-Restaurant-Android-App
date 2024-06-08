@@ -5,30 +5,30 @@
         android:title="Home" />
     <item
         android:id="@+id/nav_pizza_menu"
+        android:icon="@drawable/baseline_restaurant_menu_icon"
         android:title="Pizza menu" />
-<!--        android:icon="@drawable/ic_menu_categories"-->
     <item
         android:id="@+id/nav_orders"
+        android:icon="@drawable/baseline_delivery_icon"
         android:title="Your Orders" />
-<!--        android:icon="@drawable/ic_orders"-->
     <item
         android:id="@+id/nav_favorites"
+        android:icon="@drawable/baseline_favorites_icon"
         android:title="Your Favorites" />
-<!--        android:icon="@drawable/ic_favorites"-->
     <item
         android:id="@+id/nav_special_offers"
+        android:icon="@drawable/baseline_hot_deals_icon"
         android:title="Special Offers" />
-<!--        android:icon="@drawable/ic_hot_deals"-->
     <item
         android:id="@+id/nav_profile"
+        android:icon="@drawable/baseline_profile_icon"
         android:title="Profile" />
-<!--        android:icon="@drawable/ic_profile"-->
     <item
         android:id="@+id/nav_find_us"
+        android:icon="@drawable/baseline_contact_icon"
         android:title="Call us or Find us" />
-<!--        android:icon="@drawable/ic_notifications"-->
     <item
         android:id="@+id/nav_logout"
+        android:icon="@drawable/baseline_logout_icon"
         android:title="Logout" />
-<!--        android:icon="@drawable/ic_logout"-->
 </menu>

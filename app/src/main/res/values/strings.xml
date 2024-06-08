@@ -5,5 +5,7 @@
 
     <string name="navigation_drawer_open">Open Navigation Drawer</string>
     <string name="navigation_drawer_close">Close Navigation Drawer</string>
+    <string name="AdvancePizza_email_address">AdvancePizza@Pizza.com</string>
+    <string name="AdvancePizza_phone_number">Call us: 0599000000</string>
 
 </resources>
