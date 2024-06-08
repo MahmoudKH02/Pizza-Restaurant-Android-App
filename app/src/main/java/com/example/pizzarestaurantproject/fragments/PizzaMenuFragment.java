@@ -208,7 +208,7 @@ public class PizzaMenuFragment extends Fragment implements PizzaAdapter.OnPizzaC
         List<String> categories = new ArrayList<>();
         categories.add("Classic");
         categories.add("Spicy");
-        categories.add("Classic");
+        categories.add("spicy");
         categories.add("Classic");
         categories.add("Classic");
         categories.add("Classic");
