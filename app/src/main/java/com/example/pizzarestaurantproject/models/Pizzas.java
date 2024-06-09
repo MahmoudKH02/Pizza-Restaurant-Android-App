@@ -9,6 +9,7 @@ public class    Pizzas implements Serializable {
     private String size;
     private String category;
     private int imageResourceId; // Resource ID for the pizza image
+    private boolean favorite; // Add this field
 
     public Pizzas(String name, String description, double price, String size, String category, int imageResourceId) {
         this.name = name;
@@ -17,6 +18,11 @@ public class    Pizzas implements Serializable {
         this.size = size;
         this.category = category;
         this.imageResourceId = imageResourceId;
+        this.favorite = false; // Initialize as not favorite
+    }
+    public Pizzas(String name) {
+        this.name = name;
+
     }
 
     // Getters and setters
@@ -42,5 +48,12 @@ public class    Pizzas implements Serializable {
 
     public int getImageResourceId() {
         return imageResourceId;
+    }
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 }
