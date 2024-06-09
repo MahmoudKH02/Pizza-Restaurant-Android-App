@@ -1,4 +1,6 @@
-package com.example.pizzarestaurantproject;
+package com.example.pizzarestaurantproject.models;
+
+import com.example.pizzarestaurantproject.Order;
 
 import java.util.ArrayList;
 
@@ -95,4 +97,4 @@ public class User {
     public void setAdmin(boolean admin) {
         isAdmin = admin;
     }
-}
+} // end class

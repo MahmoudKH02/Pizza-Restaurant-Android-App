@@ -1,14 +1,126 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.ProfileFragment">
+    android:padding="16dp">
 
-    <!-- TODO: Update blank fragment layout -->
+    <!-- Profile Picture -->
+    <ImageView
+        android:id="@+id/imageViewProfilePicture"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="Profile Picture"
+        android:onClick="onChangeProfilePictureClicked"
+        android:scaleType="centerCrop" />
+<!--        android:src="@drawable/ic_profile_placeholder" />-->
+
+    <!-- Change Profile Picture Button -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Profile" />
+        android:id="@+id/textViewChangePicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageViewProfilePicture"
+        android:layout_centerHorizontal="true"
+        android:clickable="true"
+        android:drawableLeft="@drawable/baseline_photo_icon"
+        android:drawablePadding="5dp"
+        android:padding="8dp"
+        android:text="Change Picture"
+        android:textAlignment="center" />
 
-</FrameLayout>
+    <!-- Email Name -->
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewChangePicture"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="#4CAF50"
+        android:editable="false"
+        android:hint="Email Address" />
+
+    <!-- First Name -->
+    <EditText
+        android:id="@+id/editTextFirstName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextEmail"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="#4CAF50"
+        android:hint="First Name"
+        android:inputType="textPersonName" />
+
+    <!-- Last Name -->
+    <EditText
+        android:id="@+id/editTextLastName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextFirstName"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#4CAF50"
+        android:hint="Last Name"
+        android:inputType="textPersonName" />
+
+    <!-- Password -->
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextLastName"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#4CAF50"
+        android:hint="New Password"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/editTextPasswordConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextPassword"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#4CAF50"
+        android:hint="Confirm Password"
+        android:inputType="textPassword" />
+
+    <!-- Phone Number -->
+    <EditText
+        android:id="@+id/editTextPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextPasswordConfirm"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#4CAF50"
+        android:hint="Phone Number"
+        android:inputType="phone" />
+
+    <!-- Update Button -->
+    <Button
+        android:id="@+id/buttonUpdateProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextPhoneNumber"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="#4CAF50"
+        android:text="Update Profile"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/discardButton"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_below="@+id/buttonUpdateProfile"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="125dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="125dp"
+        android:backgroundTint="#BFBFBF"
+        android:drawableLeft="@drawable/baseline_discard_icon"
+        android:drawableTint="#CF1B1B"
+        android:text="Discard"
+        android:textColor="#CF1B1B"
+        android:textSize="16sp" />
+
+</RelativeLayout>

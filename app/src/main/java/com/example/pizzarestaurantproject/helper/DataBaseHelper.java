@@ -7,11 +7,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.pizzarestaurantproject.Order;
-import com.example.pizzarestaurantproject.User;
 import com.example.pizzarestaurantproject.models.Pizzas;
+import com.example.pizzarestaurantproject.models.User;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -57,8 +56,6 @@ public class DataBaseHelper extends android.database.sqlite.SQLiteOpenHelper {
                         "IMAGE_RESOURCE_ID INTEGER," + // Change data type to INTEGER for imageResourceId
                         "FOREIGN KEY (EMAIL) REFERENCES users(EMAIL))"
         );
-
-
     }
 
     @Override
@@ -180,9 +177,6 @@ public class DataBaseHelper extends android.database.sqlite.SQLiteOpenHelper {
         }
     }
 
-
-
-
     public void deleteFavorite(String email, String pizzaType) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("favorites", "EMAIL = ? AND PIZZA_TYPE = ?", new String[]{email, pizzaType});
@@ -211,8 +205,27 @@ public class DataBaseHelper extends android.database.sqlite.SQLiteOpenHelper {
         return favorites;
     }
 
+    public void updateUser(User user) {
+        // Get a writable instance of the database
+        SQLiteDatabase db = this.getWritableDatabase();
 
+        ContentValues values = new ContentValues();
+        values.put("PASSWORD", user.getPassword());
+        values.put("FIRST_NAME", user.getFirstName());
+        values.put("LAST_NAME", user.getLastName());
+        values.put("PHONE", user.getPhoneNumber());
+        values.put("GENDER", user.getGender());
+        values.put("PROFILE_PIC", user.getProfilePicturePath());
+        values.put("IS_ADMIN", user.isAdmin() ? 1 : 0); // Assuming `isAdmin` returns a boolean
 
+        String whereClause = "EMAIL = ?";
+        String[] whereArgs = { user.getEmail() };
 
+        int rowsAffected = db.update("users", values, whereClause, whereArgs);
+
+        Log.d("Database", "Number of rows updated: " + rowsAffected);
+
+        db.close();
+    }
 
 } // end class

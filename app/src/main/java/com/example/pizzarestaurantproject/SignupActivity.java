@@ -22,10 +22,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.pizzarestaurantproject.helper.DataBaseHelper;
+import com.example.pizzarestaurantproject.helper.InputValidator;
 import com.example.pizzarestaurantproject.helper.SharedPrefManager;
+import com.example.pizzarestaurantproject.models.User;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.regex.Pattern;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -124,25 +125,39 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
-    // validate and store................................................
     public boolean validInputs() {
-
-        // TODO: Before returning a value, we should display an error message to the user
-        //  (we can do that in the each 'valid' function)...
 
         boolean isValid = true;
 
-        if (validName(firstNameField.getText().toString())) {
+        if (InputValidator.validName(firstNameField.getText().toString())) {
             changeColor(firstNameField, Color.parseColor(GREEN));
+            removeErrorMsg(namesLayout, namesErrorDisplayed);
+            namesErrorDisplayed = false;
+
         } else {
             changeColor(firstNameField, Color.parseColor(RED));
+            displayError(
+                    "Names Must be at least 3 characters long",
+                    namesLayout,
+                    namesErrorDisplayed
+            );
+            namesErrorDisplayed = true;
             isValid = false;
         }
 
-        if (validName(lastNameField.getText().toString())) {
+        if (InputValidator.validName(lastNameField.getText().toString())) {
             changeColor(lastNameField, Color.parseColor(GREEN));
+            removeErrorMsg(namesLayout, namesErrorDisplayed);
+            namesErrorDisplayed = false;
+
         } else {
             changeColor(lastNameField, Color.parseColor(RED));
+            displayError(
+                    "Names Must be at least 3 characters long",
+                    namesLayout,
+                    namesErrorDisplayed
+            );
+            namesErrorDisplayed = true;
             isValid = false;
         }
 
@@ -152,42 +167,56 @@ public class SignupActivity extends AppCompatActivity {
         if (!validEmail(emailField.getText().toString()))
             isValid = false;
 
-        if (!validPassword(passwordField.getText().toString()))
+        if (InputValidator.invalidPassword(passwordField.getText().toString())) {
+            displayError(
+                    "Password must be at least 8 characters long," +
+                    " and include one or more digits, " +
+                    "one or more alphabetic character",
+                    passwordField,
+                    passwordErrorDisplayed
+            );
+            passwordErrorDisplayed = true;
             isValid = false;
 
-        if (!validPhoneNumber(phoneNumberField.getText().toString()))
+        } else {
+            removeErrorMsg(passwordField, passwordErrorDisplayed);
+            changeColor(passwordField, Color.parseColor(GREEN));
+            passwordErrorDisplayed = false;
+        }
+
+        if (InputValidator.invalidPassword(
+                passwordField.getText().toString(),
+                confirmPasswordField.getText().toString()))
+        {
+            displayError(
+                    "Passwords Do not Match!",
+                    confirmPasswordField,
+                    confirmPasswordErrorDisplayed
+            );
+            confirmPasswordErrorDisplayed = true;
+
+        } else {
+            removeErrorMsg(confirmPasswordField, confirmPasswordErrorDisplayed);
+            changeColor(confirmPasswordField, Color.parseColor(GREEN));
+            confirmPasswordErrorDisplayed = false;
+        }
+
+        if (InputValidator.invalidPhoneNumber(phoneNumberField.getText().toString())) {
+            displayError(
+                    "Phone number must be 10 digits long, and start with '05'",
+                    phoneNumberField,
+                    phoneErrorDisplayed
+            );
+            phoneErrorDisplayed = true;
             isValid = false;
+
+        } else {
+            removeErrorMsg(phoneNumberField, phoneErrorDisplayed);
+            changeColor(phoneNumberField, Color.parseColor(GREEN));
+            phoneErrorDisplayed = false;
+        }
 
         return isValid;
-
-
-//        return (
-//                validName(firstNameField.getText().toString())
-//                && validName(lastNameField.getText().toString())
-//                && (genderSpinner.getSelectedItem().toString().equalsIgnoreCase("Male")
-//                    || !genderSpinner.getSelectedItem().toString().equalsIgnoreCase("Female"))
-//                && validEmail(emailField.getText().toString())
-//                && validPassword(passwordField.getText().toString())
-//                && validPhoneNumber(phoneNumberField.getText().toString())
-//        );
-    }
-
-    public boolean validName(String name) {
-
-        if (name.length() < 3) {
-            displayError(
-                    "Names Must be at least 3 characters long",
-                    namesLayout,
-                    namesErrorDisplayed
-            );
-            namesErrorDisplayed = true;
-
-            return false;
-        }
-        removeErrorMsg(namesLayout, namesErrorDisplayed);
-        namesErrorDisplayed = false;
-
-        return true;
     }
 
     public boolean validGender(String gender) {
@@ -236,65 +265,6 @@ public class SignupActivity extends AppCompatActivity {
         dataBaseHelper.close();
 
         return false;
-    }
-
-    public boolean validPassword(String password) {
-        String regexPattern = "^(?=.*[A-Za-z])(?=.*\\d).{8,}$";
-        Pattern pattern = Pattern.compile(regexPattern);
-
-        if (!pattern.matcher(password).matches()) {
-            displayError(
-                    "Password must be at least 8 characters long," +
-                    " and include one or more digits, " +
-                    "one or more alphabetic character",
-                    passwordField,
-                    passwordErrorDisplayed
-            );
-            passwordErrorDisplayed = true;
-
-            return false;
-        }
-        removeErrorMsg(passwordField, passwordErrorDisplayed);
-        changeColor(passwordField, Color.parseColor(GREEN));
-        passwordErrorDisplayed = false;
-
-        if (!password.equals(confirmPasswordField.getText().toString())) {
-            displayError(
-                    "Passwords Do not Match!",
-                    confirmPasswordField,
-                    confirmPasswordErrorDisplayed
-            );
-            confirmPasswordErrorDisplayed = true;
-
-            return false;
-        }
-        removeErrorMsg(confirmPasswordField, confirmPasswordErrorDisplayed);
-        changeColor(confirmPasswordField, Color.parseColor(GREEN));
-        confirmPasswordErrorDisplayed = false;
-
-        return true;
-    }
-
-    public boolean validPhoneNumber(String number) {
-        String regexPattern = "^05\\d{8}$";
-
-        Pattern pattern = Pattern.compile(regexPattern);
-
-        if (!pattern.matcher(number).matches()) {
-            displayError(
-                    "Phone number must be 10 digits long, and start with '05'",
-                    phoneNumberField,
-                    phoneErrorDisplayed
-            );
-            phoneErrorDisplayed = true;
-
-            return false;
-        }
-        removeErrorMsg(phoneNumberField, phoneErrorDisplayed);
-        changeColor(phoneNumberField, Color.parseColor(GREEN));
-        phoneErrorDisplayed = false;
-
-        return true;
     }
 
     /* Displays an error message */
