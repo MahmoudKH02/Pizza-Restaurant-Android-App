@@ -14,20 +14,27 @@
         android:textStyle="bold"
         android:layout_marginBottom="16dp" />
 
-    <EditText
-        android:id="@+id/sizeInput"
+    <Spinner
+        android:id="@+id/sizeSpinner"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:layout_marginBottom="16dp"
-        android:hint="Size" />
+        android:layout_marginBottom="16dp" />
 
     <EditText
         android:id="@+id/quantityInput"
         android:layout_width="match_parent"
-        android:layout_height="59dp"
+        android:layout_height="71dp"
         android:layout_marginBottom="16dp"
         android:hint="Quantity"
         android:inputType="number" />
+
+    <TextView
+        android:id="@+id/totalPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Total Price: $0.00"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp" />
 
     <Button
         android:id="@+id/submitButton"

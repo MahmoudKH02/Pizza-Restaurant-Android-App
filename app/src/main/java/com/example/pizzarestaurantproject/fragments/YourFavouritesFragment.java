@@ -4,10 +4,23 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pizzarestaurantproject.R;
+import com.example.pizzarestaurantproject.adapters.FavoritePizzaAdapter;
+import com.example.pizzarestaurantproject.helper.DataBaseHelper;
+import com.example.pizzarestaurantproject.helper.SharedPrefManager;
+import com.example.pizzarestaurantproject.models.Pizzas;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,6 +33,13 @@ public class YourFavouritesFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private DataBaseHelper dbHelper;
+    private List<Pizzas> favoritePizzas;
+    private SharedPrefManager sharedPrefManager;
+
+    private FavoritePizzaAdapter adapter;
+
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -54,12 +74,45 @@ public class YourFavouritesFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        sharedPrefManager = SharedPrefManager.getInstance(requireContext());
+        String userEmail =sharedPrefManager.readString("email","No Val") ;
+        dbHelper = new DataBaseHelper(requireContext(),"PIZZA_RESTAURANT",null, 1);
+        favoritePizzas = dbHelper.getFavorites(userEmail);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_your_favourites, container, false);
+        View view = inflater.inflate(R.layout.fragment_your_favourites, container, false);
+
+        // Set up RecyclerView or ListView to display favoritePizzas
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerViewFavorites);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        // Create a list to hold the Pizzas objects corresponding to favorite pizza names
+
+
+         adapter = new FavoritePizzaAdapter(favoritePizzas, new FavoritePizzaAdapter.OnItemClickListener() {
+            @Override
+            public void onOrderClick(Pizzas pizza) {
+                OrderDialogFragment dialogFragment = OrderDialogFragment.newInstance(pizza);
+                dialogFragment.show(getParentFragmentManager(), "OrderDialog");
+            }
+
+            @Override
+            public void onUndoFavoriteClick(Pizzas pizza) {
+                sharedPrefManager = SharedPrefManager.getInstance(requireContext());
+                String userEmail =sharedPrefManager.readString("email","No Val") ;
+                dbHelper.deleteFavorite(userEmail, pizza.getName());
+                favoritePizzas.remove(pizza);
+                adapter.notifyDataSetChanged();
+            }
+
+        });
+        recyclerView.setAdapter(adapter);
+
+        return view;
     }
+    //  Adapter
+
+
 }

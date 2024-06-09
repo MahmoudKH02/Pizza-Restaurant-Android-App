@@ -6,8 +6,12 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.SearchView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +22,8 @@ import com.example.pizzarestaurantproject.Pizza;
 
 import com.example.pizzarestaurantproject.R;
 import com.example.pizzarestaurantproject.adapters.PizzaAdapter;
+import com.example.pizzarestaurantproject.helper.DataBaseHelper;
+import com.example.pizzarestaurantproject.helper.SharedPrefManager;
 import com.example.pizzarestaurantproject.models.Pizzas;
 
 
@@ -30,7 +36,11 @@ public class PizzaMenuFragment extends Fragment implements PizzaAdapter.OnPizzaC
     private PizzaAdapter adapter;
     private List<Pizzas> pizzaList;
     private SearchView searchView;
-    private EditText priceEditText, sizeEditText, categoryEditText;
+    private EditText priceEditText;
+    private Spinner sizeSpinner;
+    private Spinner categorySpinner;
+    private SharedPrefManager sharedPrefManager;
+
 
     public PizzaMenuFragment() {
         // Required empty public constructor
@@ -56,8 +66,8 @@ public class PizzaMenuFragment extends Fragment implements PizzaAdapter.OnPizzaC
         recyclerView = view.findViewById(R.id.recyclerView);
         searchView = view.findViewById(R.id.searchView);
         priceEditText = view.findViewById(R.id.priceEditText);
-        sizeEditText = view.findViewById(R.id.sizeEditText);
-        categoryEditText = view.findViewById(R.id.categoryEditText);
+        sizeSpinner = view.findViewById(R.id.sizeSpinner);
+        categorySpinner = view.findViewById(R.id.categorySpinner);
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -66,6 +76,35 @@ public class PizzaMenuFragment extends Fragment implements PizzaAdapter.OnPizzaC
 
 
         setupSearchView();
+        // Set up size spinner
+        ArrayAdapter<CharSequence> sizeAdapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.size_array, android.R.layout.simple_spinner_item);
+        sizeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sizeSpinner.setAdapter(sizeAdapter);
+        sizeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                applyFilters(searchView.getQuery().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        // Set up category spinner
+        ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.category_array, android.R.layout.simple_spinner_item);
+        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(categoryAdapter);
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                applyFilters(searchView.getQuery().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
 
         TextWatcher filterTextWatcher = new TextWatcher() {
             @Override
@@ -83,8 +122,7 @@ public class PizzaMenuFragment extends Fragment implements PizzaAdapter.OnPizzaC
         };
 
         priceEditText.addTextChangedListener(filterTextWatcher);
-        sizeEditText.addTextChangedListener(filterTextWatcher);
-        categoryEditText.addTextChangedListener(filterTextWatcher);
+
 
 
 
@@ -111,8 +149,8 @@ public class PizzaMenuFragment extends Fragment implements PizzaAdapter.OnPizzaC
     private void applyFilters(String query) {
         adapter.applyTextFilter(query);
         adapter.applyPriceFilter(priceEditText.getText().toString());
-        adapter.applySizeFilter(sizeEditText.getText().toString());
-        adapter.applyCategoryFilter(categoryEditText.getText().toString());
+        adapter.applySizeFilter(sizeSpinner.getSelectedItem().toString());
+        adapter.applyCategoryFilter(categorySpinner.getSelectedItem().toString());
     }
 
     @Override
@@ -139,8 +177,18 @@ public class PizzaMenuFragment extends Fragment implements PizzaAdapter.OnPizzaC
     }
 
     private void addToFavorites(Pizzas pizza) {
-        // Implement method to add pizza to favorites
+        DataBaseHelper dbHelper = new DataBaseHelper(requireContext(),"PIZZA_RESTAURANT",
+                null, 1);
+        sharedPrefManager =SharedPrefManager.getInstance(requireContext());
+        String userEmail =sharedPrefManager.readString("email","No Val") ;
+
+            dbHelper.insertFavorite(userEmail, pizza.getName(), pizza.getDescription(), pizza.getPrice(), pizza.getSize(), pizza.getCategory(), pizza.getImageResourceId());
+
+
+        Toast.makeText(getContext(), "Added to favorites", Toast.LENGTH_SHORT).show();
+
     }
+
 
     private void orderPizza(Pizzas pizza) {
         OrderDialogFragment dialogFragment = OrderDialogFragment.newInstance(pizza);
@@ -206,19 +254,19 @@ public class PizzaMenuFragment extends Fragment implements PizzaAdapter.OnPizzaC
 
     private List<String> getPizzaCategories() {
         List<String> categories = new ArrayList<>();
+        categories.add("Vegetarian");
+        categories.add("Meat");
+        categories.add("Meat");
+        categories.add("Beef");
+        categories.add("Chicken");
+        categories.add("Veggies");
         categories.add("Classic");
-        categories.add("Spicy");
-        categories.add("spicy");
-        categories.add("Classic");
-        categories.add("Classic");
-        categories.add("Classic");
-        categories.add("Classic");
-        categories.add("Classic");
-        categories.add("Classic");
-        categories.add("Classic");
-        categories.add("Classic");
-        categories.add("Classic");
-        categories.add("Classic");
+        categories.add("Meat");
+        categories.add("Vegetarian");
+        categories.add("Meat");
+        categories.add("Meat");
+        categories.add("Beef");
+        categories.add("Chicken");
         return categories;
     }
 
@@ -249,36 +297,37 @@ public class PizzaMenuFragment extends Fragment implements PizzaAdapter.OnPizzaC
     private List<Double> getPizzaPrices() {
         List<Double> prices = new ArrayList<>();
         prices.add(10.99);
+        prices.add(2.99);
         prices.add(12.99);
-        prices.add(12.99);
-        prices.add(12.99);
-        prices.add(12.99);
-        prices.add(12.99);
-        prices.add(12.99);
-        prices.add(12.99);
-        prices.add(12.99);
-        prices.add(12.99);
-        prices.add(12.99);
-        prices.add(12.99);
-        prices.add(12.99);
+        prices.add(8.50);
+        prices.add(15.75);
+        prices.add(7.25);
+        prices.add(11.30);
+        prices.add(9.45);
+        prices.add(13.60);
+        prices.add(6.80);
+        prices.add(14.25);
+        prices.add(5.90);
+        prices.add(16.50);
         return prices;
     }
 
     private List<String> getPizzaSizes() {
         List<String> sizes = new ArrayList<>();
+        sizes.add("Small");
         sizes.add("Medium");
         sizes.add("Large");
+        sizes.add("Extra Large");
+        sizes.add("Small");
+        sizes.add("Medium");
         sizes.add("Large");
+        sizes.add("Extra Large");
+        sizes.add("Small");
+        sizes.add("Medium");
         sizes.add("Large");
-        sizes.add("Large");
-        sizes.add("Large");
-        sizes.add("Large");
-        sizes.add("Large");
-        sizes.add("Large");
-        sizes.add("Large");
-        sizes.add("Large");
-        sizes.add("Large");
-        sizes.add("Large");
+        sizes.add("Extra Large");
+        sizes.add("Small");
+
         return sizes;
     }
 

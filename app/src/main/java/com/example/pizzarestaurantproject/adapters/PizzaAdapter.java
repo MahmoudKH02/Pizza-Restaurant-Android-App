@@ -30,6 +30,8 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
     private String filterCategory = "";
 
 
+
+
     public interface OnPizzaClickListener {
         void onPizzaDetailsClick(Pizzas pizza);
         void onAddToFavoritesClick(Pizzas pizza);
@@ -54,6 +56,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
     public void onBindViewHolder(@NonNull PizzaViewHolder holder, int position) {
         Pizzas pizza = pizzaList.get(position);
         holder.bind(pizza, listener);
+        
     }
 
     @Override
@@ -73,15 +76,14 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
     }
 
     public void applySizeFilter(String size) {
-        filterSize = size.toLowerCase();
+        filterSize = size.equals("All") ? "" : size;
         applyFilters();
     }
 
     public void applyCategoryFilter(String category) {
-        filterCategory = category.toLowerCase();
+        filterCategory = category.equals("All") ? "" : category;
         applyFilters();
     }
-
     private void applyFilters() {
         List<Pizzas> filteredList = pizzaListFull.stream()
                 .filter(pizza -> (filterText.isEmpty() || pizza.getName().toLowerCase().contains(filterText)) &&
@@ -119,9 +121,23 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
             pizzaName.setText(pizza.getName());
             pizzaImage.setImageResource(pizza.getImageResourceId());
             pizzaName.setOnClickListener(v -> listener.onPizzaDetailsClick(pizza));
-            addToFavoritesButton.setOnClickListener(v -> listener.onAddToFavoritesClick(pizza));
+
+            // Check if the pizza is already in favorites and set button text accordingly
+            if (pizza.isFavorite()) {
+                addToFavoritesButton.setText("Added");
+            } else {
+                addToFavoritesButton.setText("Add to Favorites");
+            }
+
+            addToFavoritesButton.setOnClickListener(v -> {
+                listener.onAddToFavoritesClick(pizza);
+                pizza.setFavorite(true); // Mark the pizza as favorite
+                addToFavoritesButton.setText("Added");
+            });
+
             orderButton.setOnClickListener(v -> listener.onOrderClick(pizza));
         }
+
     }
 
 }
