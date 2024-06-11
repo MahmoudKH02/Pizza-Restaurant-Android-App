@@ -60,14 +60,24 @@ public class LoginActivity extends AppCompatActivity {
                         null, 1
                 );
 
-                Cursor user = dataBaseHelper.getUser(email.getText().toString());
+                Cursor cursor = dataBaseHelper.getUser(email.getText().toString());
 
                 try {
 
-                    if (user != null && user.moveToFirst() && checkCorrectPassword(user)) {
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    if (cursor != null && cursor.moveToFirst() && checkCorrectPassword(cursor)) {
+                        int adminIndex = cursor.getColumnIndex("IS_ADMIN");
+                        boolean isAdmin = cursor.getInt(adminIndex) == 1;
+
+                        Intent intent;
+
+                        if (isAdmin) {
+                            intent = new Intent(LoginActivity.this, AdminActivity.class);
+                        } else {
+                            intent = new Intent(LoginActivity.this, MainActivity.class);
+                        }
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
+
                     } else {
                         displayError("Please Check your Email and Password, then try again");
                     }

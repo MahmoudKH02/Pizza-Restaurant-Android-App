@@ -1,6 +1,7 @@
 package com.example.pizzarestaurantproject.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
@@ -19,9 +20,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.example.pizzarestaurantproject.R;
@@ -41,20 +41,20 @@ public class ProfileFragment extends Fragment {
 
     private static final String GREEN = "#4CAF50";
     private static final String RED = "#FFFF0057";
-
     private static final int PICK_IMAGE = 1;
+
     private ImageView imageViewProfilePicture;
     private EditText editTextFirstName, editTextLastName, editTextPassword, editTextPhoneNumber,
             editTextEmailAddress, editTextConfirmPassword;
     private Button buttonUpdateProfile, buttonDiscardChanges;
 
-    private String originalFirstName, originalLastName, originalPhone, originalProfilePicture;
-    private String oldPassword, oldSalt;
-    private String originalGender;
+    private String originalProfilePicture;
+    private String oldSalt;
+
+    private final User originalUser = new User();
 
     private boolean isChanged = false;
     private boolean listenersEnabled;
-    private String profilePicturePath = null;
 
 
     private String mParam1;
@@ -85,8 +85,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         imageViewProfilePicture = view.findViewById(R.id.imageViewProfilePicture);
@@ -107,8 +106,7 @@ public class ProfileFragment extends Fragment {
 
         TextWatcher watcher = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
@@ -138,11 +136,11 @@ public class ProfileFragment extends Fragment {
         buttonDiscardChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editTextFirstName.setText(originalFirstName);
-                editTextLastName.setText(originalLastName);
+                editTextFirstName.setText(originalUser.getFirstName());
+                editTextLastName.setText(originalUser.getLastName());
                 editTextPassword.setText("");
                 editTextConfirmPassword.setText("");
-                editTextPhoneNumber.setText(originalPhone);
+                editTextPhoneNumber.setText(originalUser.getPhoneNumber());
 
                 buttonUpdateProfile.setEnabled(false);
                 buttonDiscardChanges.setEnabled(false);
@@ -154,6 +152,9 @@ public class ProfileFragment extends Fragment {
                 changeColor(editTextConfirmPassword, Color.parseColor(GREEN));
 
                 isChanged = false;
+                originalUser.setProfilePicturePath(originalProfilePicture);
+
+                setImageViewFromUri(Uri.parse(originalProfilePicture));
             }
         });
 
@@ -166,6 +167,27 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        listenersEnabled = false;
+
+        editTextEmailAddress.setText(originalUser.getEmail());
+        editTextFirstName.setText(originalUser.getFirstName());
+        editTextLastName.setText(originalUser.getLastName());
+        editTextPhoneNumber.setText(originalUser.getPhoneNumber());
+
+        editTextPassword.setText("");
+        editTextConfirmPassword.setText("");
+
+        listenersEnabled = true;
+
+        Log.d("Profile Picture Path After onResume", originalProfilePicture);
+
+        setImageViewFromUri(Uri.parse(originalUser.getProfilePicturePath()));
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
 
         SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance(requireContext());
         String email = sharedPrefManager.readString("email", "No Val");
@@ -186,56 +208,42 @@ public class ProfileFragment extends Fragment {
             int passwordIndex = cursor.getColumnIndex("PASSWORD");
             int saltIndex = cursor.getColumnIndex("SALT");
             int genderIndex = cursor.getColumnIndex("GENDER");
+            int adminIndex = cursor.getColumnIndex("IS_ADMIN");
 
             listenersEnabled = false;
 
             originalProfilePicture = cursor.getString(profilePictureIndex);
 
-            if (profilePicturePath == null)
-                profilePicturePath = originalProfilePicture;
+            if (originalUser.getProfilePicturePath() == null)
+                originalUser.setProfilePicturePath(originalProfilePicture);
 
-            originalFirstName = cursor.getString(firstNameIndex);
-            originalLastName = cursor.getString(lastNameIndex);
-            originalPhone = cursor.getString(phoneIndex);
-            oldPassword = cursor.getString(passwordIndex);
+            originalUser.setEmail(email);
+            originalUser.setPassword(cursor.getString(passwordIndex));
+            originalUser.setFirstName(cursor.getString(firstNameIndex));
+            originalUser.setLastName(cursor.getString(lastNameIndex));
+            originalUser.setPhoneNumber(cursor.getString(phoneIndex));
+            originalUser.setGender(cursor.getString(genderIndex));
+            originalUser.setAdmin( cursor.getInt(adminIndex) == 1 );
+
+            Log.d("ADMIN", String.valueOf(originalUser.isAdmin()));
+
+
             oldSalt = cursor.getString(saltIndex);
-            originalGender = cursor.getString(genderIndex);
-
-            editTextEmailAddress.setText(email);
-            editTextFirstName.setText(originalFirstName);
-            editTextLastName.setText(originalLastName);
-            editTextPhoneNumber.setText(originalPhone);
-            editTextPassword.setText("");
-            editTextConfirmPassword.setText("");
-
-            listenersEnabled = true;
-
-            Log.d("Profile Picture Path After onResume", originalProfilePicture);
-
-            if (profilePicturePath != null && !profilePicturePath.isEmpty()) {
-                Glide.with(this)
-                        .load(profilePicturePath)
-                        .placeholder(R.drawable.ic_launcher_foreground) // Placeholder image while loading
-                        .error(R.drawable.ic_launcher_background) // Image for loading errors
-                        .into(imageViewProfilePicture);
-            } else {
-                // Set a default image if no profile picture path is found
-                imageViewProfilePicture.setImageResource(R.drawable.ic_launcher_foreground);
-            }
-
         }
         dataBaseHelper.close();
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDetach() {
+        super.onDetach();
 
         buttonUpdateProfile.setEnabled(false);
         buttonDiscardChanges.setEnabled(false);
 
         if (isChanged)
             Toast.makeText(getActivity(), "Changes were Discarded", Toast.LENGTH_SHORT).show();
+
+        isChanged = false;
     }
 
     private void openGallery() {
@@ -253,8 +261,8 @@ public class ProfileFragment extends Fragment {
 
             assert selectedImageUri != null;
 
-            profilePicturePath = selectedImageUri.toString();
-            Log.d("Profile Picture Path After Read", profilePicturePath);
+            originalUser.setProfilePicturePath(selectedImageUri.toString());
+            Log.d("Profile Picture Path After Read", originalUser.getProfilePicturePath());
             isChanged = true;
 
             buttonDiscardChanges.setEnabled(true);
@@ -263,9 +271,17 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setImageViewFromUri(Uri imageUri) {
-        Glide.with(this)
-                .load(imageUri)
-                .into(imageViewProfilePicture);
+
+        if (imageUri != null) {
+                Glide.with(this)
+                        .load(imageUri)
+                        .placeholder(R.drawable.ic_launcher_foreground) // Placeholder image while loading
+                        .error(R.drawable.ic_launcher_background) // Image for loading errors
+                        .into(imageViewProfilePicture);
+            } else {
+                // Set a default image if no profile picture path is found
+                imageViewProfilePicture.setImageResource(R.drawable.ic_launcher_foreground);
+            }
     }
 
     private void updateProfile() {
@@ -330,7 +346,7 @@ public class ProfileFragment extends Fragment {
         try {
             currentPassword = PasswordHashing.hashPassword(password, oldSalt);
 
-            if (currentPassword.equals(oldPassword)) {
+            if (currentPassword.equals(originalUser.getPassword())) {
                 changeColor(editTextPassword, Color.parseColor(RED));
                 invalidInputs = true;
 
@@ -351,22 +367,15 @@ public class ProfileFragment extends Fragment {
                     null, 1
             );
 
-            User updatedUser = new User(
-                    email, oldPassword, originalFirstName, originalLastName,
-                    originalPhone, originalGender, originalProfilePicture,
-                    false
-            );
-
-            updatedUser.setFirstName(firstName);
-            updatedUser.setLastName(lastName);
-            updatedUser.setPhoneNumber(phoneNumber);
-            updatedUser.setProfilePicturePath(profilePicturePath);
-            Log.d("Profile Picture Path in Update", profilePicturePath);
+            originalUser.setFirstName(firstName);
+            originalUser.setLastName(lastName);
+            originalUser.setPhoneNumber(phoneNumber);
+            Log.d("Profile Picture Path in Update", originalUser.getProfilePicturePath());
 
             if (!password.isEmpty())
-                updatedUser.setPassword(currentPassword);
+                originalUser.setPassword(currentPassword);
 
-            dataBaseHelper.updateUser(updatedUser);
+            dataBaseHelper.updateUser(originalUser);
 
             dataBaseHelper.close();
 
@@ -376,24 +385,13 @@ public class ProfileFragment extends Fragment {
             buttonDiscardChanges.setEnabled(false);
             isChanged = false;
 
-        } else if (currentPassword.equals(oldPassword)) {
+        } else if (currentPassword.equals(originalUser.getPassword())) {
             toastMessage = "New password can't be the same as old one!";
         } else {
             toastMessage = "Please Check your inputs, and try again!";
         }
 
         Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_SHORT).show();
-    }
-
-    public void refreshFragment() {
-        FragmentManager fragmentManager = getFragmentManager();
-
-        if (fragmentManager != null) {
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.detach(this);  // Detach the fragment
-            fragmentTransaction.attach(this);  // Reattach the fragment
-            fragmentTransaction.commit();      // Commit the transaction
-        }
     }
 
     public void changeColor(View view, int color) {

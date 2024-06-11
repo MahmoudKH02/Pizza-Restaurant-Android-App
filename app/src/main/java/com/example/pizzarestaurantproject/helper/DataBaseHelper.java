@@ -5,7 +5,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.example.pizzarestaurantproject.Order;
@@ -82,7 +81,10 @@ public class DataBaseHelper extends android.database.sqlite.SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertUser(User user, Bitmap profilePicture) throws NoSuchAlgorithmException {
+    /**
+     * This Method Will Hash the password automatically
+     */
+    public void insertUser(User user) throws NoSuchAlgorithmException {
 //        String filePath = saveImageToInternalStorage(profilePicture);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();

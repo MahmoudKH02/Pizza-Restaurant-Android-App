@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -23,7 +24,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity {
+public class AdminActivity extends AppCompatActivity {
 
     private static final int BACK_PRESS_INTERVAL = 2000; // 2 seconds
     private long lastBackPressedTime;
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_admin);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.drawer_layout_admin), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         drawerLayout = findViewById(R.id.drawer_layout_admin);
+        ImageView headerProfilePicture = findViewById(R.id.header_profile_picture);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar,
@@ -59,8 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Define top-level destinations
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_pizza_menu, R.id.nav_orders, R.id.nav_favorites,
-                R.id.nav_special_offers, R.id.nav_profile, R.id.nav_find_us)
+                R.id.nav_profile, R.id.nav_add_admin, R.id.nav_orders, R.id.nav_add_offers)
                 .setOpenableLayout(drawerLayout)
                 .build();
 
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void logout() {
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        Intent intent = new Intent(AdminActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
     }
@@ -136,5 +137,4 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_admin);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
     }
-
 } // end class

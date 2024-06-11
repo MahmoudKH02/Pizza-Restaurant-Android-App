@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/nav_profile">
+
+    <fragment
+        android:id="@+id/nav_profile"
+        android:label="Profile"
+        android:name="com.example.pizzarestaurantproject.fragments.ProfileFragment"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/nav_add_admin"
+        android:label="Add Admin"
+        android:name="com.example.pizzarestaurantproject.fragments.AddAdminFragment"
+        tools:layout="@layout/fragment_pizza_menu" />
+    <fragment
+        android:id="@+id/nav_orders"
+        android:label="Your Orders"
+        android:name="com.example.pizzarestaurantproject.fragments.YourOrdersFragment"
+        tools:layout="@layout/fragment_your_orders" />
+    <fragment
+        android:id="@+id/nav_add_offers"
+        android:label="Add Offers"
+        android:name="com.example.pizzarestaurantproject.fragments.AddSpecialOffersFragment"
+        tools:layout="@layout/fragment_your_favourites" />
+</navigation>

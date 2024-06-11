@@ -102,7 +102,7 @@ public class SignupActivity extends AppCompatActivity {
                             "PIZZA_RESTAURANT",
                             null, 1
                     )) {
-                        dbHelper.insertUser(user, null);
+                        dbHelper.insertUser(user);
                     } catch (NoSuchAlgorithmException e) {
                         throw new RuntimeException(e);
                     }
