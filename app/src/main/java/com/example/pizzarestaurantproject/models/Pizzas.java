@@ -56,4 +56,15 @@ public class    Pizzas implements Serializable {
     public void setFavorite(boolean favorite) {
         this.favorite = favorite;
     }
+    // Static method to convert from SpecialOffer to Pizzas
+    public static Pizzas fromSpecialOffer(SpecialOffer specialOffer) {
+        return new Pizzas(
+                specialOffer.getTitle(),
+                specialOffer.getDescription(),
+                specialOffer.getPrice(),
+                specialOffer.getSize(),
+                specialOffer.getCategory(),
+                specialOffer.getImageUrl()
+        );
+    }
 }

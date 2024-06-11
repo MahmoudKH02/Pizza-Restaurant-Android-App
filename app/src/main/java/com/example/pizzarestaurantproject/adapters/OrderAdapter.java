@@ -37,10 +37,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
         Order order = orders.get(position);
         holder.pizzaNameTextView.setText(order.getPizzaType());
-        holder.priceTextView.setText(String.format("$%.2f", order.getPrice()));
         holder.dateTextView.setText(order.getFormattedDate());
-        holder.quantityTextView.setText(String.valueOf(order.getQuantity()));
-        holder.sizeTextView.setText(order.getSize());
         holder.imageView.setImageResource(order.getImageResourceId());
 
         holder.itemView.setOnClickListener(v -> {
@@ -61,10 +58,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
             pizzaNameTextView = itemView.findViewById(R.id.pizza_name_text_view);
-            priceTextView = itemView.findViewById(R.id.price_text_view);
             dateTextView = itemView.findViewById(R.id.date_text_view);
-            quantityTextView = itemView.findViewById(R.id.quantity_text_view);
-            sizeTextView = itemView.findViewById(R.id.size_text_view);
             imageView = itemView.findViewById(R.id.image_view);
         }
     }

@@ -4,45 +4,40 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pizzarestaurantproject.R;
+import com.example.pizzarestaurantproject.adapters.SpecialOffersAdapter;
+import com.example.pizzarestaurantproject.helper.DataBaseHelper;
+import com.example.pizzarestaurantproject.models.Pizzas;
+import com.example.pizzarestaurantproject.models.SpecialOffer;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SpecialOffersFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class SpecialOffersFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private List<SpecialOffer> specialOffers;
+    private RecyclerView recyclerViewSpecialOffers;
+    private SpecialOffersAdapter specialOffersAdapter;
 
     public SpecialOffersFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SpecialOffersFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static SpecialOffersFragment newInstance(String param1, String param2) {
         SpecialOffersFragment fragment = new SpecialOffersFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString("param1", param1);
+        args.putString("param2", param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,16 +45,43 @@ public class SpecialOffersFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        // Initialize special offers list
+        specialOffers = new ArrayList<>();
+        // Load special offers from the database
+        DataBaseHelper dbHelper = new DataBaseHelper(getActivity(), "PIZZA_RESTAURANT", null, 1);
+        // Insert static special offers
+        dbHelper.insertSpecialOffer("Special Pizza", "Delicious pizza with special toppings", 12.99, R.drawable.special, 1, "Medium","meat");
+        dbHelper.insertSpecialOffer("Combo Deal", "Get a pizza, drink, and dessert for a great price", 19.99, R.drawable.special, 1, "Large","meat");
+        dbHelper.insertSpecialOffer("Family Meal", "Large pizza with sides for the whole family", 24.99, R.drawable.special, 1, "Family Size","meat");
+        specialOffers = dbHelper.getSpecialOffers();
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_special_offers, container, false);
+        View view = inflater.inflate(R.layout.fragment_special_offers, container, false);
+
+        // Initialize RecyclerView
+        recyclerViewSpecialOffers = view.findViewById(R.id.recyclerViewSpecialOffers);
+        recyclerViewSpecialOffers.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Initialize adapter
+        specialOffersAdapter = new SpecialOffersAdapter(getContext(), specialOffers);
+        recyclerViewSpecialOffers.setAdapter(specialOffersAdapter);
+        specialOffersAdapter.setOnOrderClickListener(new SpecialOffersAdapter.OnOrderClickListener() {
+            @Override
+            public void onOrderClick(int position) {
+                // Handle order button click here
+                SpecialOffer specialOffer = specialOffers.get(position);
+                Pizzas pizza = Pizzas.fromSpecialOffer(specialOffer);
+                OrderDialogFragment dialogFragment = OrderDialogFragment.newInstance(pizza);
+                dialogFragment.show(getParentFragmentManager(), "OrderDialog");
+
+            }
+        });
+
+        return view;
     }
 }

@@ -9,7 +9,9 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.example.pizzarestaurantproject.Order;
+import com.example.pizzarestaurantproject.R;
 import com.example.pizzarestaurantproject.models.Pizzas;
+import com.example.pizzarestaurantproject.models.SpecialOffer;
 import com.example.pizzarestaurantproject.models.User;
 
 import java.security.NoSuchAlgorithmException;
@@ -26,6 +28,7 @@ public class DataBaseHelper extends android.database.sqlite.SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         db.execSQL(
                 "CREATE TABLE users(EMAIL TEXT PRIMARY KEY, PASSWORD TEXT, SALT TEXT," +
                         "FIRST_NAME TEXT, LAST_NAME TEXT," +
@@ -56,6 +59,18 @@ public class DataBaseHelper extends android.database.sqlite.SQLiteOpenHelper {
                         "IMAGE_RESOURCE_ID INTEGER," + // Change data type to INTEGER for imageResourceId
                         "FOREIGN KEY (EMAIL) REFERENCES users(EMAIL))"
         );
+        db.execSQL(
+                "CREATE TABLE special_offers(" +
+                        "OFFER_ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "TITLE TEXT," +
+                        "DESCRIPTION TEXT," +
+                        "PRICE REAL," +
+                        "IMAGE_URL INTEGER," +
+                        "QUANTITY INTEGER," +
+                        "CATEGORY TEXT," +
+                        "SIZE TEXT)"
+        );
+
     }
 
     @Override
@@ -63,6 +78,7 @@ public class DataBaseHelper extends android.database.sqlite.SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS users");
         db.execSQL("DROP TABLE IF EXISTS orders");
         db.execSQL("DROP TABLE IF EXISTS favorites");
+        db.execSQL("DROP TABLE IF EXISTS special_offers");
         onCreate(db);
     }
 
@@ -227,5 +243,44 @@ public class DataBaseHelper extends android.database.sqlite.SQLiteOpenHelper {
 
         db.close();
     }
+    public void insertSpecialOffer(String title, String description, double price, int imageUrl, int quantity, String size, String category) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("TITLE", title);
+        values.put("DESCRIPTION", description);
+        values.put("PRICE", price);
+        values.put("IMAGE_URL", imageUrl);
+        values.put("QUANTITY", quantity);
+        values.put("SIZE", size);
+        values.put("CATEGORY", category); // Add the category to the ContentValues
+        db.insert("special_offers", null, values);
+        db.close();
+    }
+
+
+
+    public List<SpecialOffer> getSpecialOffers() {
+        List<SpecialOffer> specialOffers = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM special_offers", null);
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int offerId = cursor.getInt(cursor.getColumnIndex("OFFER_ID"));
+                @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex("TITLE"));
+                @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("DESCRIPTION"));
+                @SuppressLint("Range") double price = cursor.getDouble(cursor.getColumnIndex("PRICE"));
+                @SuppressLint("Range") int imageUrl = cursor.getInt(cursor.getColumnIndex("IMAGE_URL"));
+                @SuppressLint("Range") int quantity = cursor.getInt(cursor.getColumnIndex("QUANTITY"));
+                @SuppressLint("Range") String size = cursor.getString(cursor.getColumnIndex("SIZE"));
+                @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex("CATEGORY")); // Retrieve the category
+                SpecialOffer specialOffer = new SpecialOffer(offerId, title, description, price, imageUrl, quantity, size, category);
+                specialOffers.add(specialOffer);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return specialOffers;
+    }
+
 
 } // end class
