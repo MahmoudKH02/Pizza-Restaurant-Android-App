@@ -45,10 +45,18 @@ public class SpecialOffersFragment extends Fragment {
         // Load special offers from the database
         DataBaseHelper dbHelper = new DataBaseHelper(getActivity(), "PIZZA_RESTAURANT", null, 1);
         // Insert static special offers
-        dbHelper.insertSpecialOffer("Special Pizza", "Delicious pizza with special toppings", 12.99, R.drawable.special, 1, "Medium","meat");
-        dbHelper.insertSpecialOffer("Combo Deal", "Get a pizza, drink, and dessert for a great price", 19.99, R.drawable.special, 1, "Large","meat");
-        dbHelper.insertSpecialOffer("Family Meal", "Large pizza with sides for the whole family", 24.99, R.drawable.special, 1, "Family Size","meat");
+        dbHelper.insertSpecialOffer("Special Pizza", "Delicious pizza with special toppings", 12.99, R.drawable.special, 1, "Medium", "meat", "2024-06-11T20:12:00");
+        dbHelper.insertSpecialOffer("Combo Deal", "Get a pizza, drink, and dessert for a great price", 19.99, R.drawable.special, 1, "Large", "meat", "2024-06-11T20:28:00");
+        dbHelper.insertSpecialOffer("Family Meal", "Large pizza with sides for the whole family", 24.99, R.drawable.special, 1, "Family Size", "meat", "2024-06-11T20:27:00");
+
         specialOffers = dbHelper.getSpecialOffers();
+    }
+
+    private void removeExpiredSpecialOffers() {
+        DataBaseHelper dbHelper = new DataBaseHelper(getActivity(), "PIZZA_RESTAURANT", null, 1);
+        dbHelper.deleteExpiredSpecialOffers();
+        List<SpecialOffer> updatedSpecialOffers = dbHelper.getSpecialOffers();
+        specialOffersAdapter.updateData(updatedSpecialOffers);
     }
 
     @Override
@@ -64,6 +72,10 @@ public class SpecialOffersFragment extends Fragment {
         // Initialize adapter
         specialOffersAdapter = new SpecialOffersAdapter(getContext(), specialOffers);
         recyclerViewSpecialOffers.setAdapter(specialOffersAdapter);
+
+        // Remove expired special offers and update RecyclerView
+        removeExpiredSpecialOffers();
+
         specialOffersAdapter.setOnOrderClickListener(new SpecialOffersAdapter.OnOrderClickListener() {
             @Override
             public void onOrderClick(int position) {
@@ -72,10 +84,11 @@ public class SpecialOffersFragment extends Fragment {
                 Pizzas pizza = Pizzas.fromSpecialOffer(specialOffer);
                 OrderDialogFragment dialogFragment = OrderDialogFragment.newInstance(pizza);
                 dialogFragment.show(getParentFragmentManager(), "OrderDialog");
-
             }
         });
 
         return view;
     }
+
+
 }

@@ -2,6 +2,7 @@ package com.example.pizzarestaurantproject.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pizzarestaurantproject.R;
+import com.example.pizzarestaurantproject.helper.DataBaseHelper;
 import com.example.pizzarestaurantproject.models.SpecialOffer;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdapter.ViewHolder> {
 
@@ -51,6 +55,8 @@ public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdap
         holder.priceTextView.setText(String.format("$%.2f", specialOffer.getPrice()));
         // Load image using Picasso library
         holder.imageView.setImageResource(specialOffer.getImageUrl());
+        updateCountdownTimer(holder, specialOffer, position);
+
 
         holder.orderButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,12 +73,33 @@ public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdap
         return specialOffers.size();
     }
 
+    public void updateData(List<SpecialOffer> newSpecialOffers) {
+        this.specialOffers.clear();
+        this.specialOffers.addAll(newSpecialOffers);
+        notifyDataSetChanged();
+    }
+    public void removeItem(int position) {
+        int offerId = specialOffers.get(position).getOfferId();
+        specialOffers.remove(position);
+        notifyItemRemoved(position);
+        removeExpiredOfferFromDatabase(offerId);
+    }
+    private void removeExpiredOfferFromDatabase(int offerId) {
+        DataBaseHelper dbHelper = new DataBaseHelper(context,   "PIZZA_RESTAURANT", null, 1);
+        dbHelper.deleteSpecialOffer(offerId);
+    }
+
+
+
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView titleTextView;
         TextView descriptionTextView;
         TextView priceTextView;
         ImageView imageView;
         Button orderButton;
+        TextView countdownTimerTextView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -81,6 +108,39 @@ public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdap
             priceTextView = itemView.findViewById(R.id.priceTextView);
             imageView = itemView.findViewById(R.id.imageView);
             orderButton = itemView.findViewById(R.id.orderButton);
+            countdownTimerTextView = itemView.findViewById(R.id.countdownTimerTextView);
+
+        }
+    }
+    private void updateCountdownTimer(ViewHolder holder, SpecialOffer specialOffer, int position) {
+        Date offerEndDate = specialOffer.getOfferEndDate();
+        if (offerEndDate == null) return;
+
+        long remainingTime = offerEndDate.getTime() - System.currentTimeMillis();
+
+        if (remainingTime > 0) {
+            new CountDownTimer(remainingTime, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    long hours = millisUntilFinished / (1000 * 60 * 60);
+                    long minutes = (millisUntilFinished % (1000 * 60 * 60)) / (1000 * 60);
+                    long seconds = (millisUntilFinished % (1000 * 60)) / 1000;
+
+                    String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
+                    holder.countdownTimerTextView.setText(timeLeftFormatted);
+                }
+
+                @Override
+                public void onFinish() {
+                    holder.countdownTimerTextView.setText("00:00:00");
+                    // Remove the expired offer from the list
+                    removeItem(holder.getAdapterPosition());
+                }
+            }.start();
+        } else {
+            holder.countdownTimerTextView.setText("00:00:00");
+            // Remove the expired offer from the list
+            removeItem(holder.getAdapterPosition());
         }
     }
 }

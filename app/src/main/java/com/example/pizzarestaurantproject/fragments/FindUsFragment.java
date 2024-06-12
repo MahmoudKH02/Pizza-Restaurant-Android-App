@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.pizzarestaurantproject.R;
 
-public class FindUsFragment extends Fragment {
+public class  FindUsFragment extends Fragment {
 
     @Nullable
     @Override

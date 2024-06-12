@@ -14,8 +14,11 @@ import com.example.pizzarestaurantproject.models.SpecialOffer;
 import com.example.pizzarestaurantproject.models.User;
 
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class DataBaseHelper extends android.database.sqlite.SQLiteOpenHelper {
 
@@ -67,7 +70,9 @@ public class DataBaseHelper extends android.database.sqlite.SQLiteOpenHelper {
                         "IMAGE_URL INTEGER," +
                         "QUANTITY INTEGER," +
                         "CATEGORY TEXT," +
-                        "SIZE TEXT)"
+                        "SIZE TEXT," +
+                        "OFFER_PERIOD TEXT)"  // OFFER_PERIOD stored as TEXT for date
+
         );
 
     }
@@ -245,7 +250,7 @@ public class DataBaseHelper extends android.database.sqlite.SQLiteOpenHelper {
 
         db.close();
     }
-    public void insertSpecialOffer(String title, String description, double price, int imageUrl, int quantity, String size, String category) {
+    public void insertSpecialOffer(String title, String description, double price, int imageUrl, int quantity, String size, String category ,String offer_period) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("TITLE", title);
@@ -255,6 +260,7 @@ public class DataBaseHelper extends android.database.sqlite.SQLiteOpenHelper {
         values.put("QUANTITY", quantity);
         values.put("SIZE", size);
         values.put("CATEGORY", category); // Add the category to the ContentValues
+        values.put("OFFER_PERIOD",offer_period);
         db.insert("special_offers", null, values);
         db.close();
     }
@@ -275,7 +281,8 @@ public class DataBaseHelper extends android.database.sqlite.SQLiteOpenHelper {
                 @SuppressLint("Range") int quantity = cursor.getInt(cursor.getColumnIndex("QUANTITY"));
                 @SuppressLint("Range") String size = cursor.getString(cursor.getColumnIndex("SIZE"));
                 @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex("CATEGORY")); // Retrieve the category
-                SpecialOffer specialOffer = new SpecialOffer(offerId, title, description, price, imageUrl, quantity, size, category);
+                @SuppressLint("Range") String offer_period = cursor.getString(cursor.getColumnIndex("OFFER_PERIOD"));
+                SpecialOffer specialOffer = new SpecialOffer(offerId, title, description, price, imageUrl, quantity, size, category,offer_period);
                 specialOffers.add(specialOffer);
             } while (cursor.moveToNext());
         }
@@ -283,6 +290,19 @@ public class DataBaseHelper extends android.database.sqlite.SQLiteOpenHelper {
         db.close();
         return specialOffers;
     }
+    public void deleteExpiredSpecialOffers() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String currentDateTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).format(new Date());
+        db.execSQL("DELETE FROM special_offers WHERE datetime(OFFER_PERIOD) < datetime(?)", new String[]{currentDateTime});
+    }
+    public void deleteSpecialOffer(int offerId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("special_offers", "TITLE = ?", new String[]{String.valueOf(offerId)});
+    }
+
+
+
+
 
 
 } // end class
