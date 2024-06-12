@@ -68,7 +68,6 @@ public class ProfileFragment extends Fragment {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -180,8 +179,6 @@ public class ProfileFragment extends Fragment {
 
         listenersEnabled = true;
 
-        Log.d("Profile Picture Path After onResume", originalProfilePicture);
-
         setImageViewFromUri(Uri.parse(originalUser.getProfilePicturePath()));
     }
 
@@ -191,6 +188,7 @@ public class ProfileFragment extends Fragment {
 
         SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance(requireContext());
         String email = sharedPrefManager.readString("email", "No Val");
+        Log.d("Email in Fragment", email);
 
         DataBaseHelper dataBaseHelper = new DataBaseHelper(
                 requireContext(),

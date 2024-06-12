@@ -8,11 +8,16 @@
         android:id="@+id/nav_profile"
         android:label="Profile"
         android:name="com.example.pizzarestaurantproject.fragments.ProfileFragment"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile">
+        <argument
+            android:name="user_email"
+            app:argType="string" />
+    </fragment>
+
     <fragment
         android:id="@+id/nav_add_admin"
         android:label="Add Admin"
-        android:name="com.example.pizzarestaurantproject.fragments.AddAdminFragment"
+        android:name="com.example.pizzarestaurantproject.fragments.SignupFragment"
         tools:layout="@layout/fragment_pizza_menu" />
     <fragment
         android:id="@+id/nav_orders"

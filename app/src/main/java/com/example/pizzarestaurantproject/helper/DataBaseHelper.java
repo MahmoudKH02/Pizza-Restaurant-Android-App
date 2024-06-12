@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.example.pizzarestaurantproject.Order;
-import com.example.pizzarestaurantproject.R;
 import com.example.pizzarestaurantproject.models.Pizzas;
 import com.example.pizzarestaurantproject.models.SpecialOffer;
 import com.example.pizzarestaurantproject.models.User;
@@ -122,6 +121,7 @@ public class DataBaseHelper extends android.database.sqlite.SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         return sqLiteDatabase.rawQuery("SELECT * FROM users WHERE users.EMAIL=='" + email + "'", null);
     }
+
     public void insertOrder(Order order) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -135,6 +135,11 @@ public class DataBaseHelper extends android.database.sqlite.SQLiteOpenHelper {
         values.put("IMAGE_RESOURCE_ID", order.getImageResourceId());
         db.insert("orders", null, values);
         db.close();
+    }
+
+    public Cursor getAllOrders() {
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        return sqLiteDatabase.rawQuery("SELECT * FROM orders", null);
     }
 
     public List<Order> getOrders(String email) {

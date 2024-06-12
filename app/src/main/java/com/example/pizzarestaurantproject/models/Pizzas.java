@@ -2,7 +2,7 @@ package com.example.pizzarestaurantproject.models;
 
 import java.io.Serializable;
 
-public class    Pizzas implements Serializable {
+public class Pizzas implements Serializable {
     private String name;
     private String description;
     private double price;

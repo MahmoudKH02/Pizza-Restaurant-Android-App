@@ -50,7 +50,6 @@ public class LoginActivity extends AppCompatActivity {
         Button login = (Button) findViewById(R.id.createAccountButton);
         Button signup = (Button) findViewById(R.id.signupButtonFromLogin);
 
-
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,6 +74,9 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             intent = new Intent(LoginActivity.this, MainActivity.class);
                         }
+                        sharedPrefManager.writeBoolean("remember", checkBox.isChecked());
+                        sharedPrefManager.writeString("email", email.getText().toString());
+
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
 
@@ -132,9 +134,14 @@ public class LoginActivity extends AppCompatActivity {
         sharedPrefManager = SharedPrefManager.getInstance(this);
 
         boolean checked = sharedPrefManager.readBoolean("remember",false);
+        boolean newAccount = sharedPrefManager.readBoolean("new_account", false);
 
         checkBox.setChecked(checked);
-        email.setText(sharedPrefManager.readString("email", ""));
+
+        if (checked || newAccount)
+            email.setText(sharedPrefManager.readString("email", ""));
+        else
+            email.setText("");
     }
 
     @Override
@@ -142,23 +149,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onStop();
 
         sharedPrefManager.writeBoolean("remember", checkBox.isChecked());
-
-        if (checkBox.isChecked())
-            sharedPrefManager.writeString("email", email.getText().toString());
-        else
-            sharedPrefManager.writeString("email", "");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        sharedPrefManager.writeBoolean("remember", checkBox.isChecked());
-
-        if (checkBox.isChecked())
-            sharedPrefManager.writeString("email", email.getText().toString());
-        else
-            sharedPrefManager.writeString("email", "");
+        sharedPrefManager.writeString("email", email.getText().toString());
+        sharedPrefManager.writeBoolean("new_account", false);
     }
 
 } // end class

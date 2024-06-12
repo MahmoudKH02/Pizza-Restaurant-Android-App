@@ -8,7 +8,7 @@
         android:icon="@drawable/baseline_add_admin"
         android:title="Add Admin" />
     <item
-        android:id="@+id/nav_all_orders"
+        android:id="@+id/nav_orders"
         android:icon="@drawable/baseline_delivery_icon"
         android:title="View All Orders" />
     <item

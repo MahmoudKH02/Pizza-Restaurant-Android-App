@@ -39,7 +39,6 @@ public class LoginSignupActivity extends AppCompatActivity {
 
         view.setText(Arrays.toString(Pizza.getPizzaTypes().toArray()));
 
-
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

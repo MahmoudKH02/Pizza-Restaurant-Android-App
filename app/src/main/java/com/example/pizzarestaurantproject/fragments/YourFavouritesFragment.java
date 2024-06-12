@@ -4,11 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +15,6 @@ import com.example.pizzarestaurantproject.helper.DataBaseHelper;
 import com.example.pizzarestaurantproject.helper.SharedPrefManager;
 import com.example.pizzarestaurantproject.models.Pizzas;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -75,7 +70,7 @@ public class YourFavouritesFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         sharedPrefManager = SharedPrefManager.getInstance(requireContext());
-        String userEmail =sharedPrefManager.readString("email","No Val") ;
+        String userEmail = sharedPrefManager.readString("email","No Val") ;
         dbHelper = new DataBaseHelper(requireContext(),"PIZZA_RESTAURANT",null, 1);
         favoritePizzas = dbHelper.getFavorites(userEmail);
     }
@@ -101,18 +96,15 @@ public class YourFavouritesFragment extends Fragment {
             @Override
             public void onUndoFavoriteClick(Pizzas pizza) {
                 sharedPrefManager = SharedPrefManager.getInstance(requireContext());
-                String userEmail =sharedPrefManager.readString("email","No Val") ;
+                String userEmail = sharedPrefManager.readString("email","No Val");
                 dbHelper.deleteFavorite(userEmail, pizza.getName());
                 favoritePizzas.remove(pizza);
                 adapter.notifyDataSetChanged();
             }
-
         });
         recyclerView.setAdapter(adapter);
 
         return view;
     }
     //  Adapter
-
-
 }
