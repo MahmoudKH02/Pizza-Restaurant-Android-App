@@ -1,45 +1,64 @@
-<!-- item_pizza.xml -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:layout_margin="8dp"
+    card_view:cardCornerRadius="8dp"
+    card_view:cardElevation="4dp">
 
-    <TextView
-        android:id="@+id/pizzaName"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:text="Pizza Name"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:padding="8dp">
 
-    <ImageView
-        android:id="@+id/pizzaImage"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_below="@id/pizzaName"
-        android:adjustViewBounds="true" />
+        <ImageView
+            android:id="@+id/pizzaImage"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:layout_centerHorizontal="true"/>
 
-    <LinearLayout
-        android:layout_width="329dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/pizzaImage"
-        android:gravity="end"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/addToFavorites"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add to Favorites" />
-
-        <Button
-            android:id="@+id/orderButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
             android:layout_marginStart="8dp"
-            android:text="Order" />
-    </LinearLayout>
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/baseline_favorites_icon" />
 
-</RelativeLayout>
+
+        <TextView
+            android:id="@+id/pizzaName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pizzaImage"
+            android:layout_marginTop="8dp"
+            android:text="Pizza Name"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pizzaName"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/orderButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Order" />
+        </LinearLayout>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

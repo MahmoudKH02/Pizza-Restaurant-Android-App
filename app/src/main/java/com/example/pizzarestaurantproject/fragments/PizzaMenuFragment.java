@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.pizzarestaurantproject.Pizza;
@@ -70,8 +71,12 @@ public class PizzaMenuFragment extends Fragment implements PizzaAdapter.OnPizzaC
         categorySpinner = view.findViewById(R.id.categorySpinner);
 
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new PizzaAdapter(pizzaList,this);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        recyclerView.setLayoutManager(gridLayoutManager);
+
+
+       // recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new PizzaAdapter(getContext(),pizzaList,this);
         recyclerView.setAdapter(adapter);
 
 

@@ -168,7 +168,7 @@ public class DataBaseHelper extends android.database.sqlite.SQLiteOpenHelper {
             db = this.getWritableDatabase();
 
             // Check if the pizza already exists in favorites
-            if (!isPizzaInFavorites(email, pizzaType, db)) {
+            if (!isPizzaInFavorites(email, pizzaType)) {
                 ContentValues values = new ContentValues();
                 values.put("EMAIL", email);
                 values.put("PIZZA_TYPE", pizzaType);
@@ -189,7 +189,8 @@ public class DataBaseHelper extends android.database.sqlite.SQLiteOpenHelper {
         }
     }
 
-    private boolean isPizzaInFavorites(String email, String pizzaType, SQLiteDatabase db) {
+    public boolean isPizzaInFavorites(String email, String pizzaType) {
+        SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = null;
         try {
             cursor = db.rawQuery("SELECT * FROM favorites WHERE EMAIL = ? AND PIZZA_TYPE = ?", new String[]{email, pizzaType});

@@ -1,5 +1,8 @@
 package com.example.pizzarestaurantproject.adapters;
 
+
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pizzarestaurantproject.R;
+import com.example.pizzarestaurantproject.helper.DataBaseHelper;
+import com.example.pizzarestaurantproject.helper.SharedPrefManager;
 import com.example.pizzarestaurantproject.models.Pizzas;
 
 import java.util.ArrayList;
@@ -21,8 +27,12 @@ import java.util.stream.Collectors;
 public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHolder> {
 
     private List<Pizzas> pizzaList;
+    private Context context;
+
     private List<Pizzas> pizzaListFull;
     private final OnPizzaClickListener listener;
+    private SharedPrefManager sharedPrefManager;
+
 
     private String filterText = "";
     private String filterPrice = "";
@@ -30,15 +40,16 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
     private String filterCategory = "";
 
 
-
-
     public interface OnPizzaClickListener {
         void onPizzaDetailsClick(Pizzas pizza);
+
         void onAddToFavoritesClick(Pizzas pizza);
+
         void onOrderClick(Pizzas pizza);
     }
 
-    public PizzaAdapter(List<Pizzas> pizzaList, OnPizzaClickListener listener) {
+    public PizzaAdapter(Context context, List<Pizzas> pizzaList, OnPizzaClickListener listener) {
+        this.context = context;
         this.pizzaList = pizzaList;
         this.pizzaListFull = new ArrayList<>(pizzaList);
         this.listener = listener;
@@ -56,7 +67,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
     public void onBindViewHolder(@NonNull PizzaViewHolder holder, int position) {
         Pizzas pizza = pizzaList.get(position);
         holder.bind(pizza, listener);
-        
+
     }
 
     @Override
@@ -84,6 +95,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
         filterCategory = category.equals("All") ? "" : category;
         applyFilters();
     }
+
     private void applyFilters() {
         List<Pizzas> filteredList = pizzaListFull.stream()
                 .filter(pizza -> (filterText.isEmpty() || pizza.getName().toLowerCase().contains(filterText)) &&
@@ -101,43 +113,48 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
     public class PizzaViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView pizzaName;
-        private final Button addToFavoritesButton;
         private final Button orderButton;
         private final ImageView pizzaImage;
+        private final ImageView favoriteIcon; // Use ImageView for favorite icon
 
         public PizzaViewHolder(@NonNull View itemView) {
             super(itemView);
             pizzaName = itemView.findViewById(R.id.pizzaName);
-            addToFavoritesButton = itemView.findViewById(R.id.addToFavorites);
             orderButton = itemView.findViewById(R.id.orderButton);
             pizzaImage = itemView.findViewById(R.id.pizzaImage);
+            favoriteIcon = itemView.findViewById(R.id.imageView2); // Initialize the favorite icon
 
             // Change the text color of pizzaName to white
-            pizzaName.setTextColor(Color.WHITE);
+           // pizzaName.setTextColor(Color.WHITE);
         }
-
 
         public void bind(Pizzas pizza, OnPizzaClickListener listener) {
             pizzaName.setText(pizza.getName());
             pizzaImage.setImageResource(pizza.getImageResourceId());
             pizzaName.setOnClickListener(v -> listener.onPizzaDetailsClick(pizza));
 
-            // Check if the pizza is already in favorites and set button text accordingly
-            if (pizza.isFavorite()) {
-                addToFavoritesButton.setText("Added");
+            // Use dbHelper object
+            DataBaseHelper dbHelper = new DataBaseHelper(itemView.getContext(), "PIZZA_RESTAURANT", null, 1);
+
+            // Check if the pizza is already in favorites and set icon accordingly
+            SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance(itemView.getContext());
+            String userEmail = sharedPrefManager.readString("email", "No Val");
+            if (dbHelper.isPizzaInFavorites(userEmail, pizza.getName())) {
+                favoriteIcon.setColorFilter(ContextCompat.getColor(itemView.getContext(), R.color.red)); // Change color to red
             } else {
-                addToFavoritesButton.setText("Add to Favorites");
+                favoriteIcon.setColorFilter(null); // Remove any previous color filters
             }
 
-            addToFavoritesButton.setOnClickListener(v -> {
+            favoriteIcon.setOnClickListener(v -> {
                 listener.onAddToFavoritesClick(pizza);
                 pizza.setFavorite(true); // Mark the pizza as favorite
-                addToFavoritesButton.setText("Added");
+                favoriteIcon.setColorFilter(ContextCompat.getColor(itemView.getContext(), R.color.red)); // Change color to red
             });
 
             orderButton.setOnClickListener(v -> listener.onOrderClick(pizza));
         }
 
-    }
 
+    }
 }
+
