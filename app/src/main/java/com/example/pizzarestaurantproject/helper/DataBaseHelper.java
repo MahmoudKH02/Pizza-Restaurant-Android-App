@@ -71,9 +71,7 @@ public class DataBaseHelper extends android.database.sqlite.SQLiteOpenHelper {
                         "CATEGORY TEXT," +
                         "SIZE TEXT," +
                         "OFFER_PERIOD TEXT)"  // OFFER_PERIOD stored as TEXT for date
-
         );
-
     }
 
     @Override
@@ -271,8 +269,6 @@ public class DataBaseHelper extends android.database.sqlite.SQLiteOpenHelper {
         db.close();
     }
 
-
-
     public List<SpecialOffer> getSpecialOffers() {
         List<SpecialOffer> specialOffers = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -305,10 +301,5 @@ public class DataBaseHelper extends android.database.sqlite.SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("special_offers", "TITLE = ?", new String[]{String.valueOf(offerId)});
     }
-
-
-
-
-
 
 } // end class

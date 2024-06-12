@@ -1,14 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".fragments.AddSpecialOffersFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!-- Offer Title -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical">
 
-</FrameLayout>
+        <EditText
+            android:id="@+id/offerTitleAdmin"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:hint="Offer Title"
+            android:inputType="text"
+            android:padding="8dp" />
+
+        <EditText
+            android:id="@+id/offerDescriptionAdmin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="top|start"
+            android:hint="Description"
+            android:inputType="textMultiLine"
+            android:lines="4"
+            android:padding="8dp" />
+
+        <EditText
+            android:id="@+id/offerPriceAdmin"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:hint="New Price"
+            android:inputType="text"
+            android:padding="8dp" />
+
+        <Spinner
+            android:id="@+id/pizzaTypeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:padding="8dp" />
+
+        <DatePicker
+            android:id="@+id/endDatePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/uploadImageButtonAdmin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:text="Upload Image" />
+
+        <ImageView
+            android:id="@+id/offerImageAdmin"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="Uploaded image preview"
+            android:scaleType="centerCrop" />
+
+        <Button
+            android:id="@+id/addOfferButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:text="@string/add_new_offer_button" />
+    </LinearLayout>
+
+    <!-- Offer Description -->
+
+    <!-- Spinner for Pizza Type -->
+
+    <!-- Date Picker for End Time -->
+
+    <!-- Upload Image Button -->
+
+    <!-- Image Preview -->
+</ScrollView>
