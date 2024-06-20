@@ -9,5 +9,6 @@
     <string name="AdvancePizza_phone_number">Call us: 0599000000</string>
     <string name="profile_picture">User Profile Picture</string>
     <string name="add_new_offer_button">Add New Offer</string>
+    <string name="pizza_image_description">Image of the pizza</string>
 
 </resources>

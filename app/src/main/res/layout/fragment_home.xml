@@ -1,30 +1,58 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center">
+    android:layout_height="match_parent">
 
-    <!-- ImageView to display an image -->
-
-    <!-- TextView to display text -->
+    <!-- Background image -->
     <ImageView
-        android:id="@+id/imageViewHome"
-        android:layout_width="wrap_content"
-        android:layout_height="235dp"
-        android:contentDescription="Image"
-        android:src="@drawable/home" />
+        android:id="@+id/imageViewBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/pizza4"/>
 
-    <TextView
-        android:id="@+id/textViewHome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Home"
-        android:textSize="34sp"
-        android:layout_marginTop="16dp"/>
+    <!-- Animated content -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true">
 
+        <!-- Restaurant Title -->
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Pizza Restaurant"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
 
+        <!-- Opening Hours -->
+        <TextView
+            android:id="@+id/textViewOpeningHours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewTitle"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:text="Open: Mon-Sat 11:00 AM - 10:00 PM"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"/>
 
-</LinearLayout>
+        <!-- Text describing the history -->
+        <TextView
+            android:id="@+id/textViewDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewOpeningHours"
+            android:layout_marginTop="61dp"
+            android:padding="16dp"
+            android:text="Established in 1995, our restaurant began as a humble family-owned endeavor in the heart of downtown..."
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

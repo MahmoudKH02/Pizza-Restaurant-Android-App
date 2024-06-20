@@ -1,55 +1,66 @@
-<!-- fragment_pizza_detail.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
-
-
-
+    android:padding="16dp"
+    android:background="@color/background_color">
 
     <TextView
         android:id="@+id/pizzaName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Pizza Name"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:textStyle="bold"
-        android:layout_marginBottom="8dp"/>
+        android:textColor="@color/primary_text"
+        android:gravity="center"
+        android:layout_marginBottom="12dp" />
 
     <ImageView
         android:id="@+id/pizzaImage"
         android:layout_width="match_parent"
-        android:layout_height="119dp"
+        android:layout_height="200dp"
         android:adjustViewBounds="true"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:layout_marginBottom="12dp"
+        android:contentDescription="@string/pizza_image_description" />
 
     <TextView
         android:id="@+id/pizzaDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Description"
-        android:layout_marginBottom="8dp"/>
+        android:textColor="@color/secondary_text"
+        android:textSize="16sp"
+        android:layout_marginBottom="12dp" />
 
     <TextView
         android:id="@+id/pizzaPrice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Price"
-        android:layout_marginBottom="8dp"/>
+        android:textColor="@color/secondary_text"
+        android:textSize="16sp"
+        android:layout_marginBottom="12dp" />
 
     <TextView
         android:id="@+id/pizzaSize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Size"
-        android:layout_marginBottom="8dp"/>
+        android:textColor="@color/secondary_text"
+        android:textSize="16sp"
+        android:layout_marginBottom="12dp" />
 
     <TextView
         android:id="@+id/pizzaCategory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Category"
-        android:layout_marginBottom="8dp"/>
+        android:textColor="@color/secondary_text"
+        android:textSize="16sp"
+        android:layout_marginBottom="12dp" />
 
 </LinearLayout>

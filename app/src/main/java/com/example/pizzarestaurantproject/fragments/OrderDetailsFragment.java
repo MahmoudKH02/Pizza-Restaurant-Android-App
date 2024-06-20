@@ -59,6 +59,7 @@ public class OrderDetailsFragment extends DialogFragment {
         TextView dateTextView = view.findViewById(R.id.date_text_view);
         TextView quantityTextView = view.findViewById(R.id.quantity_text_view);
         TextView sizeTextView = view.findViewById(R.id.size_text_view);
+        TextView emailTextView = view.findViewById(R.id.email_text_view);
         if (order != null) {
             imageView.setImageResource(order.getImageResourceId());
             pizzaNameTextView.setText(order.getPizzaType());
@@ -66,6 +67,7 @@ public class OrderDetailsFragment extends DialogFragment {
             dateTextView.setText(order.getFormattedDate());
             quantityTextView.setText(String.valueOf(order.getQuantity()));
             sizeTextView.setText(order.getSize());
+            emailTextView.setText(order.getUserEmail());
         }
     }
 }
