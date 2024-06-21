@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,6 +34,8 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
     private List<Pizzas> pizzaListFull;
     private final OnPizzaClickListener listener;
     private SharedPrefManager sharedPrefManager;
+
+
 
 
     private String filterText = "";
@@ -116,6 +120,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
         private final Button orderButton;
         private final ImageView pizzaImage;
         private final ImageView favoriteIcon; // Use ImageView for favorite icon
+        Animation scaleUpAnimation = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.scale_up);
 
         public PizzaViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -123,6 +128,7 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
             orderButton = itemView.findViewById(R.id.orderButton);
             pizzaImage = itemView.findViewById(R.id.pizzaImage);
             favoriteIcon = itemView.findViewById(R.id.imageView2); // Initialize the favorite icon
+
 
             // Change the text color of pizzaName to white
            // pizzaName.setTextColor(Color.WHITE);
@@ -149,7 +155,12 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
                 listener.onAddToFavoritesClick(pizza);
                 pizza.setFavorite(true); // Mark the pizza as favorite
                 favoriteIcon.setColorFilter(ContextCompat.getColor(itemView.getContext(), R.color.red)); // Change color to red
+                // Bring the favorite icon to the front
+                favoriteIcon.bringToFront();
+                // Apply the animation
+                favoriteIcon.startAnimation(scaleUpAnimation);
             });
+
 
             orderButton.setOnClickListener(v -> listener.onOrderClick(pizza));
         }
