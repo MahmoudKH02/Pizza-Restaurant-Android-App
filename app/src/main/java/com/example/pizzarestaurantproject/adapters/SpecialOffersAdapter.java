@@ -2,6 +2,7 @@ package com.example.pizzarestaurantproject.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +54,10 @@ public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdap
         holder.titleTextView.setText(specialOffer.getTitle());
         holder.descriptionTextView.setText(specialOffer.getDescription());
         holder.priceTextView.setText(String.format("$%.2f", specialOffer.getPrice()));
+
+        holder.titleTextView.setTextColor(Color.WHITE);
+        holder.descriptionTextView.setTextColor(Color.WHITE);
+        holder.priceTextView.setTextColor(Color.WHITE);
         // Load image using Picasso library
         holder.imageView.setImageResource(specialOffer.getImageUrl());
         updateCountdownTimer(holder, specialOffer, position);
@@ -89,10 +94,6 @@ public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdap
         dbHelper.deleteSpecialOffer(offerId);
     }
 
-
-
-
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView titleTextView;
         TextView descriptionTextView;
@@ -128,6 +129,7 @@ public class SpecialOffersAdapter extends RecyclerView.Adapter<SpecialOffersAdap
 
                     String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
                     holder.countdownTimerTextView.setText(timeLeftFormatted);
+                    holder.countdownTimerTextView.setTextColor(Color.WHITE);
                 }
 
                 @Override

@@ -1,5 +1,6 @@
 package com.example.pizzarestaurantproject.adapters;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,7 @@ public class FavoritePizzaAdapter extends RecyclerView.Adapter<FavoritePizzaAdap
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Pizzas pizza = favoritePizzas.get(position);
         holder.pizzaNameTextView.setText(pizza.getName());
+        holder.pizzaNameTextView.setTextColor(Color.WHITE);
         holder.pizzaImageView.setImageResource(pizza.getImageResourceId());
 
         holder.orderButton.setOnClickListener(v -> listener.onOrderClick(pizza));

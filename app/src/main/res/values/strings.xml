@@ -10,5 +10,12 @@
     <string name="profile_picture">User Profile Picture</string>
     <string name="add_new_offer_button">Add New Offer</string>
     <string name="pizza_image_description">Image of the pizza</string>
+    <string name="home_text">Established in 1995, our restaurant began as a humble family-owned endeavor in the heart of downtown.
+                With a passion for culinary excellence and a commitment to serving authentic flavors, we quickly gained a loyal following.
+                Over the years, our menu has evolved, inspired by both traditional recipes and innovative culinary trends.
+                What started as a cozy diner with a few tables has grown into a bustling eatery known for its warm hospitality and unforgettable dishes.
+                We take pride in sourcing local ingredients and crafting each meal with care, ensuring every bite reflects our dedication to quality.
+                As we celebrate our journey.
+    </string>
 
 </resources>

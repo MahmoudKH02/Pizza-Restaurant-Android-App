@@ -17,16 +17,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.pizzarestaurantproject.Pizza;
 
+import com.example.pizzarestaurantproject.Pizza;
 import com.example.pizzarestaurantproject.R;
 import com.example.pizzarestaurantproject.adapters.PizzaAdapter;
 import com.example.pizzarestaurantproject.helper.DataBaseHelper;
 import com.example.pizzarestaurantproject.helper.SharedPrefManager;
 import com.example.pizzarestaurantproject.models.Pizzas;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -291,9 +289,9 @@ public class PizzaMenuFragment extends Fragment implements PizzaAdapter.OnPizzaC
         pizzaImages.add(R.drawable.pizza_pepperoni);
         pizzaImages.add(R.drawable.newyork);
         pizzaImages.add(R.drawable.calzones);
-        pizzaImages.add(R.drawable.pepper);
+        pizzaImages.add(R.drawable.pizza_pepperoni);
         pizzaImages.add(R.drawable.bbq);
-        pizzaImages.add(R.drawable.seafood);
+        pizzaImages.add(R.drawable.pizza_pepperoni);
         pizzaImages.add(R.drawable.veggie);
         pizzaImages.add(R.drawable.buffol);
         pizzaImages.add(R.drawable.mush);

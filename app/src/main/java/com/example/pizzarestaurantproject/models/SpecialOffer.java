@@ -17,7 +17,6 @@ public class SpecialOffer {
     private String offer_period; // Add this field
 
 
-
     public SpecialOffer(int offerId, String title, String description, double price, int imageUrl, int quantity, String size, String category,String offer_period) {
         this.offerId = offerId;
         this.title = title;

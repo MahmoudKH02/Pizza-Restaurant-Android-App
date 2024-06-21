@@ -49,8 +49,8 @@
             android:layout_below="@id/textViewOpeningHours"
             android:layout_marginTop="61dp"
             android:padding="16dp"
-            android:text="Established in 1995, our restaurant began as a humble family-owned endeavor in the heart of downtown..."
-            android:textColor="@android:color/white"
+            android:text="@string/home_text"
+            android:textColor="#FFFFFF"
             android:textSize="18sp" />
 
     </RelativeLayout>

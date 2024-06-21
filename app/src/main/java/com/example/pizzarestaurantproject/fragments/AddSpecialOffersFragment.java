@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -28,7 +27,6 @@ public class AddSpecialOffersFragment extends Fragment {
     private EditText offerTitle, offerDescription, offerNewPrice;
     private Spinner pizzaTypeSpinner;
     private DatePicker endDatePicker;
-    private ImageView imagePreview;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -68,9 +66,7 @@ public class AddSpecialOffersFragment extends Fragment {
         offerNewPrice = view.findViewById(R.id.offerPriceAdmin);
         pizzaTypeSpinner = view.findViewById(R.id.pizzaTypeSpinner);
         endDatePicker = view.findViewById(R.id.endDatePicker);
-        imagePreview = view.findViewById(R.id.offerImageAdmin);
 
-        Button uploadImageButton = view.findViewById(R.id.uploadImageButtonAdmin);
         Button addOfferButton = view.findViewById(R.id.addOfferButton);
 
         // Setup Spinner
@@ -84,11 +80,6 @@ public class AddSpecialOffersFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, pizzaTypes);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         pizzaTypeSpinner.setAdapter(adapter);
-
-        uploadImageButton.setOnClickListener(v -> {
-            // Trigger image selection and display in imagePreview
-            // You will need to add logic to open the image picker and handle the result
-        });
 
         addOfferButton.setOnClickListener(v ->  {
             addNewOffer();
@@ -138,6 +129,5 @@ public class AddSpecialOffersFragment extends Fragment {
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
         );
-        imagePreview.setImageResource(R.drawable.ic_launcher_background);
     }
 }
