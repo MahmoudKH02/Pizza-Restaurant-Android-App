@@ -238,19 +238,20 @@ public class PizzaMenuFragment extends Fragment implements PizzaAdapter.OnPizzaC
     // Example methods to retrieve lists of descriptions and categories
     private List<String> getPizzaDescriptions() {
         List<String> descriptions = new ArrayList<>();
-        descriptions.add("A delicious classic pizza with mozzarella and tomato sauce.");
-        descriptions.add("Pepperoni pizza topped with spicy pepperoni slices.");
-        descriptions.add("Pepperoni pizza topped with spicy pepperoni slices.");
-        descriptions.add("Pepperoni pizza topped with spicy pepperoni slices.");
-        descriptions.add("Pepperoni pizza topped with spicy pepperoni slices.");
-        descriptions.add("Pepperoni pizza topped with spicy pepperoni slices.");
-        descriptions.add("Pepperoni pizza topped with spicy pepperoni slices.");
-        descriptions.add("Pepperoni pizza topped with spicy pepperoni slices.");
-        descriptions.add("Pepperoni pizza topped with spicy pepperoni slices.");
-        descriptions.add("Pepperoni pizza topped with spicy pepperoni slices.");
-        descriptions.add("Pepperoni pizza topped with spicy pepperoni slices.");
-        descriptions.add("Pepperoni pizza topped with spicy pepperoni slices.");
-        descriptions.add("Pepperoni pizza topped with spicy pepperoni slices.");
+        descriptions.add("A classic pizza topped with fresh mozzarella, tomato sauce, and basil leaves.");
+        descriptions.add("Traditional pizza with spicy pepperoni slices and melted mozzarella.");
+        descriptions.add("Loaded with fresh vegetables such as bell peppers, mushrooms, onions, and olives.");
+        descriptions.add("Sweet and savory pizza with pineapple, ham, and mozzarella cheese.");
+        descriptions.add("Tangy BBQ sauce topped with grilled chicken, red onions, and cilantro.");
+        descriptions.add("A blend of four cheeses - mozzarella, cheddar, parmesan, and gorgonzola.");
+        descriptions.add("Rich and earthy flavor with mushrooms, caramelized onions, and creamy ricotta.");
+        descriptions.add("The ultimate combination with pepperoni, sausage, bell peppers, olives, and onions.");
+        descriptions.add("Spicy buffalo sauce with grilled chicken, red onions, and blue cheese crumbles.");
+        descriptions.add("Fresh spinach, feta cheese, tomatoes, and garlic on a thin crust.");
+        descriptions.add("Packed with pepperoni, sausage, bacon, and ham for the meat enthusiasts.");
+        descriptions.add("Inspired by the classic Caprese salad with fresh tomatoes, basil, and creamy mozzarella.");
+        descriptions.add("Basil pesto sauce topped with grilled chicken, sun-dried tomatoes, and pine nuts.");
+
 
 
         // Add more descriptions for other pizza types
@@ -284,19 +285,19 @@ public class PizzaMenuFragment extends Fragment implements PizzaAdapter.OnPizzaC
 
     private List<Integer> getPizzaImages() {
         List<Integer> pizzaImages = new ArrayList<>();
-        pizzaImages.add(R.drawable.pizza_pepperoni);
+        pizzaImages.add(R.drawable.margaritapizza);
         pizzaImages.add(R.drawable.pizza_neaplaton);
         pizzaImages.add(R.drawable.pizza_hawaiian);
         pizzaImages.add(R.drawable.pizza_pepperoni);
-        pizzaImages.add(R.drawable.pizza_pepperoni);
-        pizzaImages.add(R.drawable.pizza_pepperoni);
-        pizzaImages.add(R.drawable.pizza_pepperoni);
-        pizzaImages.add(R.drawable.pizza_pepperoni);
-        pizzaImages.add(R.drawable.pizza_pepperoni);
-        pizzaImages.add(R.drawable.pizza_pepperoni);
-        pizzaImages.add(R.drawable.pizza_pepperoni);
-        pizzaImages.add(R.drawable.pizza_pepperoni);
-        pizzaImages.add(R.drawable.pizza_pepperoni);
+        pizzaImages.add(R.drawable.newyork);
+        pizzaImages.add(R.drawable.calzones);
+        pizzaImages.add(R.drawable.pepper);
+        pizzaImages.add(R.drawable.bbq);
+        pizzaImages.add(R.drawable.seafood);
+        pizzaImages.add(R.drawable.veggie);
+        pizzaImages.add(R.drawable.buffol);
+        pizzaImages.add(R.drawable.mush);
+        pizzaImages.add(R.drawable.chicken);
         return pizzaImages;
     }
     private List<Double> getPizzaPrices() {
