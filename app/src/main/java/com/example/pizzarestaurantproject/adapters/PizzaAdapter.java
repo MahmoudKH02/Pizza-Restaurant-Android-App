@@ -152,14 +152,27 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
             }
 
             favoriteIcon.setOnClickListener(v -> {
-                listener.onAddToFavoritesClick(pizza);
-                pizza.setFavorite(true); // Mark the pizza as favorite
-                favoriteIcon.setColorFilter(ContextCompat.getColor(itemView.getContext(), R.color.red)); // Change color to red
-                // Bring the favorite icon to the front
-                favoriteIcon.bringToFront();
-                // Apply the animation
-                favoriteIcon.startAnimation(scaleUpAnimation);
+                if (dbHelper.isPizzaInFavorites(userEmail, pizza.getName())) {
+                    // Remove from favorites
+                    dbHelper.deleteFavorite(userEmail, pizza.getName());
+                    pizza.setFavorite(false); // Mark the pizza as not favorite
+                    favoriteIcon.setColorFilter(null); // Change color to default (black)
+                    // Bring the favorite icon to the front
+                    favoriteIcon.bringToFront();
+                    // Apply the animation
+                    favoriteIcon.startAnimation(scaleUpAnimation);
+                } else {
+                    // Add to favorites
+                    listener.onAddToFavoritesClick(pizza);
+                    pizza.setFavorite(true); // Mark the pizza as favorite
+                    favoriteIcon.setColorFilter(ContextCompat.getColor(itemView.getContext(), R.color.red)); // Change color to red
+                    // Bring the favorite icon to the front
+                    favoriteIcon.bringToFront();
+                    // Apply the animation
+                    favoriteIcon.startAnimation(scaleUpAnimation);
+                }
             });
+
 
 
             orderButton.setOnClickListener(v -> listener.onOrderClick(pizza));
