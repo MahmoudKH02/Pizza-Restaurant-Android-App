@@ -60,7 +60,7 @@ public class AdminActivity extends AppCompatActivity {
 
         // Define top-level destinations
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_profile, R.id.nav_add_admin, R.id.nav_orders, R.id.nav_add_offers)
+                R.id.nav_profile, R.id.nav_add_admin, R.id.nav_orders, R.id.nav_order_report, R.id.nav_add_offers)
                 .setOpenableLayout(drawerLayout)
                 .build();
 

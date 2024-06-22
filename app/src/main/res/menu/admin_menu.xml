@@ -12,6 +12,10 @@
         android:icon="@drawable/baseline_delivery_icon"
         android:title="View All Orders" />
     <item
+        android:id="@+id/nav_order_report"
+        android:icon="@drawable/baseline_delivery_icon"
+        android:title="View Orders Report" />
+    <item
         android:id="@+id/nav_add_offers"
         android:icon="@drawable/baseline_hot_deals_icon"
         android:title="Add Special Offers" />

@@ -25,6 +25,11 @@
         android:name="com.example.pizzarestaurantproject.fragments.YourOrdersFragment"
         tools:layout="@layout/fragment_your_orders" />
     <fragment
+        android:id="@+id/nav_order_report"
+        android:label="Your Orders"
+        android:name="com.example.pizzarestaurantproject.fragments.OrdersReportFragment"
+        tools:layout="@layout/fragment_orders_report" />
+    <fragment
         android:id="@+id/nav_add_offers"
         android:label="Add Offers"
         android:name="com.example.pizzarestaurantproject.fragments.AddSpecialOffersFragment"

@@ -183,10 +183,10 @@ public class DataBaseHelper extends android.database.sqlite.SQLiteOpenHelper {
         return orders;
     }
 
-    public Cursor getOrderEachType() {
+    public Cursor getOrderInfoForEachType() {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         return sqLiteDatabase.rawQuery(
-                "SELECT PIZZA_TYPE, COUNT(*) AS number_of_orders FROM orders GROUP BY PIZZA_TYPE",
+                "SELECT PIZZA_TYPE, COUNT(*), SUM(PRICE * QUANTITY) FROM orders GROUP BY PIZZA_TYPE",
                 null
         );
     }
